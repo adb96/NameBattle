@@ -200,7 +200,7 @@ if(!gameOverFlag){
 		//build the AJAX reponses and send them...
 		//the order for the stats is atk,
 		var p1stats=str(document.getElementById(
-			}
+	}
 			
       function gameOver(winner, loser){
                 newAttack+="["+loser.name+"]<font color='red'> Lose</font> and ["+winner.name+"] <font color='green'>Win!</font>";

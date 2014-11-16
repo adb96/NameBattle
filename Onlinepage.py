@@ -42,11 +42,10 @@ HEADER = """
       <script type="text/javascript" src="js/online.js"></script>
    </head>
    <body id = "titleback" class = "wide">
+	<div class="msgsmall" id="msg1" style:"height:20%"><p class="closealign"></p><div class="closealign"><br><br><br><button id="ok" disabled>Fight</button>&nbsp&nbsp&nbsp<button id="close">Close</button></div></div>
+	<div class="logincreate2" id="wholepage">
+	<div id="login">
       <div id = "chat-container" class = "bar">
-<<<<<<< HEAD
-		<h2>Here are your available roles</h2>
-      
-=======
 		<h2 style="color:white;margin-left:30%; margin-top:20%">Here are your available roles</h2>
 		<select style="margin-left:43%" name = "srole" id="srole">
 >>>>>>> origin/master
@@ -59,6 +58,7 @@ FOOTER = """
 			<h1>Online Now</h1>
 			<ul id="userlist">			
 			</ul>
+	</div>
 	</div>
   </body></html>
   """

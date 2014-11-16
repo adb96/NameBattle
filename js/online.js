@@ -26,7 +26,8 @@ var roomnum ="";
  }
 
   function match(){
- 	var xmlhttp1=new XMLHttpRequest();
+ 	displayInfo();
+	var xmlhttp1=new XMLHttpRequest();
 	clearInterval(upuser)
  	xmlhttp1.onreadystatechange=function()
 	  {
@@ -74,4 +75,21 @@ function showUsers(){
 
 function hideUsers(){
   document.getElementById('user-container').style.display="none";
+}
+
+function displayInfo(){
+	document.getElementById("msg1").style.display ="block";
+	document.getElementById("wholepage").style.opacity="0.2";
+
+	//displayMsg="Hello there";
+	displayMsg="<img src='http://capta.mdic.gov.br/img/pic/loading.gif'>";
+  
+  
+  //function to set the created info to the hidden div pop-up
+	document.getElementById("msg1").children[0].innerHTML=displayMsg;
+
+	document.getElementById("close").onclick=function(event){
+		document.getElementById("msg1").style.display="none";
+		document.getElementById("wholepage").style.opacity="1";
+	};
 }
