@@ -1,7 +1,9 @@
 import cgi
 import urllib
 import os
+import jinja2
 from google.appengine.ext.webapp import template
+from google.appengine.api import channel
 from google.appengine.api import users
 from google.appengine.ext import ndb
 
@@ -167,7 +169,7 @@ class FightNow(webapp2.RequestHandler):
 
 class P1(webapp2.RequestHandler):
   def post(self):
-    num = int(self.request.get('roomNo'))
+    num = int(self.request.get('roomNo'))
     #staff to update
     query = Battle.query(ancestor=get_battle())
     query = query.filter(Battle.roomNo == num)
@@ -175,7 +177,7 @@ class P1(webapp2.RequestHandler):
     
 class P2(webapp2.RequestHandler):
   def post(self):
-    num = int(self.request.get('roomNo'))
+    num = int(self.request.get('roomNo'))
     query = Battle.query(ancestor=get_battle())
     query = query.filter(Battle.roomNo == num)
     rooms = query.fetch()

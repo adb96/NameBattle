@@ -1,5 +1,43 @@
-      var intervalID;
-			var player1=new Object();
+      //AJAX function import for communication to server
+function createXmlHttp() {
+	var xmlhttp;
+	if (window.XMLHttpRequest) {
+		xmlhttp = new XMLHttpRequest();
+	} else {
+		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	if (!(xmlhttp)) {
+		alert("your horrible browser does not support AJAX, get with it man");
+	}
+	return xmlhttp;
+}
+	  
+function postParameters(xmlHttp, target, parameters) {
+  if (xmlHttp) {
+    xmlHttp.open("POST", target, true);
+    xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlHttp.send(parameters);
+  }
+}
+
+//stats hold the stats for respective players, battle contains the text for the battle, and key is the key for this game  
+function updateBattle(p1stats, p2stats, battle, key){
+	var xmlHttp = createXmlHttp();
+	var key=
+}  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  var intervalID;
+	  var player1=new Object();
       var player2=new Object();
       var t1 = new Object();
       var t2 = new Object();
@@ -93,6 +131,7 @@ document.getElementById("r0").innerHTML=newAttack;
 				
 if(!gameOverFlag){
 				//build the new attack phrase...
+		  newAttack.docment.getElementById("r0").innerHTML;
           newAttack+="["+player.name+"]";
           if(turnAttack.type==0){
             newAttack+=" used <font color='#0000FF'>"+turnAttack.ability+"</font>, ["+target.name+"] lost <font color='red'>"+turnAttack.damage+"</font> HP";
@@ -129,7 +168,7 @@ if(!gameOverFlag){
              }
           }
           newAttack+="<br>";
-				  document.getElementById("r0").innerHTML=newAttack;
+		  document.getElementById("r0").innerHTML=newAttack;
           //update the healths        
           document.getElementById("p1hp").innerHTML=player1.hp;
           document.getElementById("p2hp").innerHTML=player2.hp;
@@ -143,6 +182,7 @@ if(!gameOverFlag){
             }
           else
           {
+			chp1='0%';
             document.getElementById('hp1').style.width = '0%';
             }
            if (player2.hp>0)
@@ -151,11 +191,15 @@ if(!gameOverFlag){
             }
           else
           {
+			chp2='0%';
             document.getElementById('hp2').style.width = '0%';
             }
           var box = document.getElementById('disB');
           box.scrollTop = box.scrollHeight;
         }
+		//build the AJAX reponses and send them...
+		//the order for the stats is atk,
+		var p1stats=str(document.getElementById(
 			}
 			
       function gameOver(winner, loser){

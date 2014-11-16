@@ -43,7 +43,7 @@ HEADER = """
    </head>
    <body id = "titleback" class = "wide">
       <div id = "chat-container" class = "bar">
-		<h2>Here are your available roles"</h2>
+		<h2>Here are your available roles</h2>
       
     """
 FOOTER = """
