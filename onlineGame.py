@@ -78,16 +78,16 @@ class MainPage(webapp2.RequestHandler):
 	
 	
 class CheckRoom(webapp2.RequestHandler):
-  def get(self):
+  def post(self):
+    
+    keystring = self.request.get('rkey')
+    role = ndb.Key(urlsafe=keystring).get()
+
     userFetched=UserInfo.query(UserInfo.user==users.get_current_user().nickname()).fetch(1)
     user = userFetched[0]
     user.date = datetime.now()
     user.put()
-    
-    keystring = self.request.get('key')
-    role = ndb.Key(urlsafe=keystring).get()
-    user=users.get_current_user()
-    
+
     attr = Attribute()
     attr.name = role.name
     attr.role = role.role
@@ -98,7 +98,9 @@ class CheckRoom(webapp2.RequestHandler):
     attr.wins= role.wins
     attr.defence =role.defence
     attr.key = role.key.urlsafe()
-    
+
+    user=users.get_current_user()
+
     query = Battle.query(ancestor=get_battle())
     num = len(query.fetch())+1
     query = query.filter(Battle.user2=="").order(Battle.date)
@@ -120,16 +122,31 @@ class CheckRoom(webapp2.RequestHandler):
       self.response.out.write("wait "+str(num))
     else:
       currRoom = rooms[0]
-      currRoom.user2 = user.nickname()
-      currRoom.attribute2 = attr
-      currRoom.tempatt2 = attr
-      currRoom.state2 = True
-      self.response.out.write("ok "+str(num))
+      if currRoom.user1 == user.nickname():
+        newRoom = Battle(parent=get_battle())
+        newRoom.user1 = user.nickname()
+        newRoom.attribute1 = attr
+        newRoom.tempatt1 = attr
+        newRoom.state1 = True
+      
+        newRoom.user2 = ""
+        newRoom.attribute2 = {}
+        newRoom.tempatt2 = {}
+        newRoom.state2 = False
+        newRoom.fightText = ""
+        newRoom.roomNo = num
+        newRoom.put()
+        self.response.out.write("wait "+str(num))
+      else:
+        currRoom.user2 = user.nickname()
+        currRoom.attribute2 = attr
+        currRoom.tempatt2 = attr
+        currRoom.state2 = True
+        self.response.out.write("ok "+str(num))
 
 class Wait(webapp2.RequestHandler):
-  def get(self):
-    num = int(self.request.get('roomNo')
-)
+  def post(self):
+    num = int(self.request.get('roomNo'))
     query = Battle.query(ancestor=get_battle())
     query = query.filter(Battle.roomNo == num)
     rooms = query.fetch()

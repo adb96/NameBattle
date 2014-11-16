@@ -50,7 +50,6 @@ HEADER = """
       <div id = "chat-container" class = "bar">
 		<h2 style="color:white;margin-left:30%; margin-top:20%">Here are your available roles</h2>
 		<select style="margin-left:41%" name = "srole" id="srole">
->>>>>>> origin/master
     """
 FOOTER = """
 	<br><br>
@@ -109,7 +108,14 @@ class UserHandler(webapp2.RequestHandler):
 		users = UserInfo.query().fetch()
 		tmp=""
 		for user in users:
-			tmp+='<li class="useritem">'+user.user+'</li>\n'
+			current = datetime.now()
+			last = user.date
+			time_dif = (current-last).total_seconds()
+			if time_dif > 5*60:
+				pass
+			else:
+				tmp+='<li class="useritem">'+user.user+'</li>\n'   #user has been on within a minute. Print that they're online
+
 
 		self.response.write(tmp)
               
