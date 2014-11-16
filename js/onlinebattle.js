@@ -19,12 +19,6 @@ function postParameters(xmlHttp, target, parameters) {
     xmlHttp.send(parameters);
   }
 }
-
-//stats hold the stats for respective players, battle contains the text for the battle, and key is the key for this game  
-function updateBattle(p1stats, p2stats, battle, key){
-	var xmlHttp = createXmlHttp();
-	var key=
-}  
 	  
 	  
 	  
@@ -52,10 +46,10 @@ function updateBattle(p1stats, p2stats, battle, key){
       var gamePlaying=false;
 			
 			
-			function startUp(){
-				if(gamePlaying){
-          return;
-        }
+		function startUp(){
+			if(gamePlaying){
+				return;
+			}
         
                 gamePlaying=true;
                 clearInterval(intervalID);
@@ -67,7 +61,7 @@ function updateBattle(p1stats, p2stats, battle, key){
                 p1saveHP=p1hphold;
                 player1.hp=p1hphold;
                 player1.def=document.getElementById("p1def").innerText;
-				        player1.luck=document.getElementById("p1lck").innerText;
+				player1.luck=document.getElementById("p1lck").innerText;
                 player1.counter=0;
                 player1.identity=1;
                 player1.key = document.getElementById('key').value;
@@ -115,11 +109,14 @@ console.log("p1savedHP: "+p1saveHP);
 				        document.getElementById("p2def").innerText=player2.def;
 				        document.getElementById("p2lck").innerText=player2.luck;
 				
-        newAttack+="Fight Begins!<br>"
+				newAttack+="Fight Begins!<br>"
 				
-document.getElementById("r0").innerHTML=newAttack;
-				intervalID=setInterval(function() { attackFunc() }, 3000)
-;
+				document.getElementById("r0").innerHTML=newAttack;
+				
+				p1starter=docment.getElementById("player").value;
+				if(p1starter==1){
+					intervalID=setInterval(function() { attackFunc() }, 3000);
+				}
 			}
 			
 			//returns random # between min (inclusive) and max (exclusive)
@@ -129,77 +126,83 @@ document.getElementById("r0").innerHTML=newAttack;
 			
 			function updateRows(player, target){
 				
-if(!gameOverFlag){
-				//build the new attack phrase...
-		  newAttack.docment.getElementById("r0").innerHTML;
-          newAttack+="["+player.name+"]";
-          if(turnAttack.type==0){
-            newAttack+=" used <font color='#0000FF'>"+turnAttack.ability+"</font>, ["+target.name+"] lost <font color='red'>"+turnAttack.damage+"</font> HP";
-          }
-          else if(turnAttack.type==1){
-             if(turnAttack.reciever==0){
-               newAttack+=" used skill<font color='#FE2EF7'> "+turnAttack.ability+"</font>, ["+target.name+"] lost <font color='red'>"+turnAttack.damage+"</font> HP";
-             }
-             else if(turnAttack.reciever==1){
-               newAttack+=" used skill<font color='#FE2EF7'> "+turnAttack.ability+"</font> but it failed! ["+player.name+"] lost  <font color='red'>"+turnAttack.damage+"</font> HP";             
-             }
-             else if(turnAttack.reciever==2){
-               newAttack+=" used skill<font color='#FE2EF7'> "+turnAttack.ability+"</font>, ["+player.name+"] is <font color='cyan'>INVINCIBLE</font> for one turn";
-             
-             }
-          }
-          else if(turnAttack.type==2){
-             if(turnAttack.reciever==1){
-               newAttack+=" used ult<font color='gold'> "+turnAttack.ability+"</font>, ["+player.name+"] healed <font color='#2EFE2E'> "+(-1*turnAttack.damage)+"</font> HP";
-             }
-             else if(turnAttack.reciever==3){
-               newAttack+=" used ult<font color='gold'> "+turnAttack.ability+"</font>, ["+target.name+"]  <font color='#D0FA58'> Sleep! </font>";             
-             }
-             else if(turnAttack.reciever==4){
-               newAttack+=" used ult<font color='gold'> "+turnAttack.ability+"</font>, ["+player.name+"]'s attack is <font color='#B40431'>double!</font>";             
-               
-             }
-             else if(turnAttack.reciever==5){
-               newAttack+=" used ult<font color='gold'> "+turnAttack.ability+"</font>, ["+player.name+"] <font color='#B40431'>speeds up!</font>";             
-              
-             }
-             else {
-               newAttack+=" used ult<font color='gold'> "+turnAttack.ability+"</font>, ["+target.name+"] lost  <font color='red'>"+turnAttack.damage+"</font> HP";             
-             }
-          }
-          newAttack+="<br>";
-		  document.getElementById("r0").innerHTML=newAttack;
-          //update the healths        
-          document.getElementById("p1hp").innerHTML=player1.hp;
-          document.getElementById("p2hp").innerHTML=player2.hp;
+				if(!gameOverFlag){
+					//build the new attack phrase...
+					newAttack.docment.getElementById("r0").innerHTML;
+					newAttack+="["+player.name+"]";
+				if(turnAttack.type==0){
+					newAttack+=" used <font color='#0000FF'>"+turnAttack.ability+"</font>, ["+target.name+"] lost <font color='red'>"+turnAttack.damage+"</font> HP";
+				}
+				else if(turnAttack.type==1){
+					if(turnAttack.reciever==0){
+						newAttack+=" used skill<font color='#FE2EF7'> "+turnAttack.ability+"</font>, ["+target.name+"] lost <font color='red'>"+turnAttack.damage+"</font> HP";
+					}
+					else if(turnAttack.reciever==1){
+						newAttack+=" used skill<font color='#FE2EF7'> "+turnAttack.ability+"</font> but it failed! ["+player.name+"] lost  <font color='red'>"+turnAttack.damage+"</font> HP";             
+					}
+					else if(turnAttack.reciever==2){
+						newAttack+=" used skill<font color='#FE2EF7'> "+turnAttack.ability+"</font>, ["+player.name+"] is <font color='cyan'>INVINCIBLE</font> for one turn";
+					}
+				}
+				else if(turnAttack.type==2){
+					if(turnAttack.reciever==1){
+						newAttack+=" used ult<font color='gold'> "+turnAttack.ability+"</font>, ["+player.name+"] healed <font color='#2EFE2E'> "+(-1*turnAttack.damage)+"</font> HP";
+					}
+					else if(turnAttack.reciever==3){
+						newAttack+=" used ult<font color='gold'> "+turnAttack.ability+"</font>, ["+target.name+"]  <font color='#D0FA58'> Sleep! </font>";             
+					}
+					else if(turnAttack.reciever==4){
+						newAttack+=" used ult<font color='gold'> "+turnAttack.ability+"</font>, ["+player.name+"]'s attack is <font color='#B40431'>double!</font>";              
+					}
+					else if(turnAttack.reciever==5){
+						newAttack+=" used ult<font color='gold'> "+turnAttack.ability+"</font>, ["+player.name+"] <font color='#B40431'>speeds up!</font>";             
+					}
+					else {
+						newAttack+=" used ult<font color='gold'> "+turnAttack.ability+"</font>, ["+target.name+"] lost  <font color='red'>"+turnAttack.damage+"</font> HP";             
+					}
+				}
+				newAttack+="<br>";
+				document.getElementById("r0").innerHTML=newAttack;
+				//update the healths        
+				document.getElementById("p1hp").innerHTML=player1.hp;
+				document.getElementById("p2hp").innerHTML=player2.hp;
           
-          var chp1= Math.floor(player1.hp/p1saveHP*100)+"%";
-          var chp2= Math.floor(player2.hp/p2saveHP*100)+"%";
-          //console.log(chp1+" "+chp2);
-          if (player1.hp>0)
-          {
-            document.getElementById('hp1').style.width = chp1;
-            }
-          else
-          {
-			chp1='0%';
-            document.getElementById('hp1').style.width = '0%';
-            }
-           if (player2.hp>0)
-          {  
-            document.getElementById('hp2').style.width = chp2;
-            }
-          else
-          {
-			chp2='0%';
-            document.getElementById('hp2').style.width = '0%';
-            }
-          var box = document.getElementById('disB');
-          box.scrollTop = box.scrollHeight;
-        }
-		//build the AJAX reponses and send them...
-		//the order for the stats is atk,
-		var p1stats=str(document.getElementById(
+				var chp1= Math.floor(player1.hp/p1saveHP*100)+"%";
+				var chp2= Math.floor(player2.hp/p2saveHP*100)+"%";
+				//console.log(chp1+" "+chp2);
+				if (player1.hp>0) {
+					document.getElementById('hp1').style.width = chp1;
+				}
+				else {
+					chp1='0%';
+					document.getElementById('hp1').style.width = '0%';
+				}
+				if (player2.hp>0){  
+					document.getElementById('hp2').style.width = chp2;
+				}
+				else {
+					chp2='0%';
+					document.getElementById('hp2').style.width = '0%';
+				}
+				var box = document.getElementById('disB');
+				box.scrollTop = box.scrollHeight;
+				
+				//build the AJAX reponses and send them...
+				//the order for the stats is hp, attack, speed, defence, luck
+				var sp=" ";
+				var p1stats=str(player1.hp)+sp+str(player1.atk)+sp+str(player1.speed)+sp+str(player1.def)+sp+str(player1.luck);
+				var p2stats=str(player2.hp)+sp+str(player2.atk)+sp+str(player2.speed)+sp+str(player2.def)+sp+str(player2.luck);
+				//and newattack has the new string to store
+				var xmlHttp = createXmlHttp();
+				var isFinished="over="+gameOverFlag;
+				var roomNum="roomNum="+str(document.getElementById("roomNum"));
+				var player1info="p1="+p1stats;
+				var player2info="p2="+p2stats;
+				var p=isFinished+'&'+roomNum+'&'+player1info+'&'+player2info+'&'+'battle='+newAttack;
+				postParameters(xmlHttp, '/player1', p);
+			}
+		
+		
 	}
 			
       function gameOver(winner, loser){
