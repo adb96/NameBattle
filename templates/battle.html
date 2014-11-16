@@ -1,0 +1,75 @@
+<html>
+    <head>
+      <title> Name Battle </title>
+       <link rel="stylesheet" href="css/style.css">
+       <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+
+       <script src="js/onlinebattle.js"></script>
+       <script src="js/ajax.js"></script>
+    </head>
+<body style="background-color:#999999">
+<div class ='main'>
+	<div  id ='p1' style='float: left;padding-left:1%' class='dd'>
+	<label style ="font-style:italic;
+ font-family: Cursive;">Name:<input type="text" size="10" name="name1" id = "name1" value = "{{attr1.name}}" disabled></label>
+<br>
+	<label style ="font-style:italic;
+font-family: Cursive;">Role:<input type="text" size="8" name="role1" id = "role1"  value ='{{attr1.role}}' disabled></label>
+	<table id ="table1" class = "t">
+	<tr><th>HP</th><th>Attack</th><th>Speed</th><th>Defence</th><th>Luck</th><th>Wins</th></tr>
+  <tr><td id='p1hp'>{{attr1.hp}}</td><td id='p1atk'>{{attr1.atk}}</td><td id='p1spd'>{{attr1.speed}}</td>
+  <td id='p1def'>{{attr1.defence}}</td><td id='p1lck'>{{attr1.luck}}</td><td id = 'w1'>{{attr1.wins}}</td></tr></table>
+ <input type='hidden' style='z-index:99999;' name='key1' id = 'key1' value='{{attr1.key}}'>
+    <div class='hp'>
+		  <div id ='hp1' style='width: 100%;'>
+		  </div>
+	  </div>
+	</div>
+	
+	<div style='display: inline-block;float: left;text-align:center;width: 30%;height: 20%;'>
+	<h1 id = 'h'>V.S</h1>
+	</div>
+	 <input type='hidden' style='z-index:99999;' name='player' id = 'player' value='{{player}}'>
+	<div id = 'p2' style='float: left;' class='dd'>
+	<label style ="font-style:italic;font-family: Cursive;">Name:<input type="text" name="name2" size="10" id = "name2"  value = "{{attr2.name}}" disabled></label>
+<label style ="font-style:italic;font-family: Cursive;">Role:<input type="text" size="8" name="role2" id = "role2"  value ='{{attr2.role}}' disabled></label>
+<table id ="table2" class = "t">
+	<tr><th>HP</th><th>Attack</th><th>Speed</th><th>Defence</th><th>Luck</th><th>Wins</th></tr>
+  <tr><td id='p2hp'>{{attr2.hp}}</td><td id='p2atk'>{{attr2.atk}}</td><td id='p2spd'>{{attr2.speed}}</td>
+  <td id='p2def'>{{attr2.defence}}</td><td id='p2lck'>{{attr2.luck}}</td><td id = 'w2'>{{attr2.wins}}</td></tr>
+</table>
+  <input type='hidden' style='z-index:99999;' name='key2' id = 'key2' value='{{attr2.key}}'>
+    <div class='hp'>
+		  <div id ='hp2' style='width: 100%;'>
+		  </div>
+	  </div>
+  </div>
+
+<div class = 'buttons' id = 'bt'>
+	<h2>Option</h2>
+
+	<button style="margin-top: 25%;font-size: 16pt;font-family:Impact;" onclick="startUp()">Fight!</button>
+
+  <form  method="get" action="/createmain">
+
+  <button style="margin-top: 30%;font-size: 16pt;font-family:Impact;">Change Role</button>
+  </form>
+</div>
+	
+	<div class='displayB' id = 'disB'>
+    <p id="r0" style="font-size: 20px; font-family: 'Trebuchet MS', Helvetica, sans-serif;">
+    </p>
+	</div>
+	
+	<div class='ranking'>
+	<h2>Ranking</h2>
+	<ol id = 'rank'>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+	</ol>
+	</div>
+</div>
+</body>
+</html>

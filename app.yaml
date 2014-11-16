@@ -1,0 +1,32 @@
+application: namebattle
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: true
+
+libraries:
+- name: jinja2
+  version: latest
+- name: webapp2
+  version: latest
+handlers:
+- url: /css
+  static_dir: css
+- url: /templates
+  static_dir: templates
+- url: /js
+  static_dir: js
+- url: /.*
+  script: login.application
+- url: /sign
+  script: login.application
+- url: /select
+  script: login.application
+- url: /createmain
+  script: logincreate.app
+- url: /begin
+  script: main.app
+- url: /titlescreen
+  script: title.app
+- url: /onlinefight
+  script: onlineGame.app

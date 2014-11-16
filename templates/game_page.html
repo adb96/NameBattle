@@ -1,0 +1,94 @@
+<html>
+<head>
+<title> Name Battle </title>
+	<style type="text/css">
+		
+		#main{
+			margin-left: 10%;
+			margin-right: 10%;
+			
+			width: 80%;
+			height: 100%;
+			border: 5px solid #000000;
+			background-color: #ffffff;
+		}	
+		#left{
+			text-align: top;
+			width: 35%;
+			height: 90%;
+			border: 2px solid #000000;
+			background-color: #ffffff;
+		
+		}
+		#right{
+			text-align: top;
+			width: 35%;
+			height: 90%;
+			border: 2px solid #000000;
+			background-color: #ffffff;
+		
+		}
+		#lpadding{
+		padding-left: 60px;
+		}
+		.t{
+		border: 1px solid #000000;
+		border-collapse: collapse;
+		width: 80%;
+		}
+		.t th{
+		border: 1px solid #000000;
+		border-collapse: collapse;
+		font-style:italic;
+		font-family: Cursive;
+		}
+		.t td{
+		border: 1px solid #000000;
+		border-collapse: collapse;
+		height: 20px;
+		}
+		h1 {
+		padding-left: 30%;
+		color: red;
+		font-size: 50pt;
+		}
+
+	</style>
+
+</head>
+<body style="background-color:#999999">
+<table id = "main">
+		<tr><td id = "left">
+	<div id ="lpadding">
+	<label style ="font-style:italic;
+font-family: Cursive;">Name:<input type="text" name="name1" id = "name1"></label>
+	<label style ="font-style:italic;
+font-family: Cursive;">Role:<select id="role1"><option value="stu">Student</option><option value="pro">Professor</option><option value="programmer">Programmer</option></select></label>
+	<table id ="table1" class = "t">
+	<tr><th>HP</th><th>Attack</th><th>Speed</th><th>Defence</th><th>Luck</th><th>Wins</th></tr>
+	<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+	</table>
+	<pre></pre>
+	<h1>V.S</h1>
+	<pre></pre>
+	
+	<label style ="font-style:italic;
+font-family: Cursive;">Name:<input type="text" name="name2" id = "name2"></label>
+	<label style ="font-style:italic;
+font-family: Cursive;">Role:<select id="role2"><option value="stu">Student</option><option value="pro">Professor</option><option value="programmer">Programmer</option></select></label>
+	<table id ="table2" class = "t">
+	<tr><th>HP</th><th>Attack</th><th>Speed</th><th>Defence</th><th>Luck</th><th>Wins</th></tr>
+	<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+	</table>
+	<br><br><br>
+	
+	<button style="margin-left:33%;font-size: 16pt;font-family:Impact;">Fight!</button>
+	</div></td>
+		<td id = "right">
+	<div>
+	text to be display....
+	</div></tr></td>
+
+</table>
+</body>
+</html>
