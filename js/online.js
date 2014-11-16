@@ -2,17 +2,13 @@ lasttime = '0' ;
 console.log('0');
 updateusers();
 
+var roomnum ="";
 
- setInterval(function(){
+ var upuser = setInterval(function(){
  	updateusers();
  },2000);
 
-setInterval(function(){
- 	updatechat();
- },2000);
-
  function updateusers(){
-   console.log('1');
  	var xmlhttp1=new XMLHttpRequest();
 
  	xmlhttp1.onreadystatechange=function()
@@ -29,6 +25,32 @@ setInterval(function(){
 
  }
 
+  function match(){
+ 	var xmlhttp1=new XMLHttpRequest();
+	clearInterval(upuser)
+ 	xmlhttp1.onreadystatechange=function()
+	  {
+	  if (xmlhttp1.readyState==4 && xmlhttp1.status==200)
+	    {
+			var re =xmlhttp1.responseText.split(" ");
+			roomnum= re[1]
+			if (re[0] =="ok")
+			{
+				
+			}
+			else if (re[0] == "wait")
+			{
+			}
+			else{
+				console.log(re[0]);
+			}
+	    }
+	  }
+ 	xmlhttp1.open("GET","/onlineBegin",true);
+	var key = document.getElementById("srole").value;
+	xmlhttp1.send('key='+key);
+
+ }
 
 function initTime(){
   var xmlhttp=new XMLHttpRequest();

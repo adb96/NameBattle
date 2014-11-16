@@ -43,10 +43,12 @@ HEADER = """
    </head>
    <body id = "titleback" class = "wide">
       <div id = "chat-container" class = "bar">
-		<h2>Here are your available roles"</h2>
-      
+		<h2 style="color:white;margin-left:30%; margin-top:20%">Here are your available roles</h2>
+		<select style="margin-left:43%" name = "srole" id="srole">
     """
 FOOTER = """
+	<br><br>
+	<button  style="margin-left:38%" type="submit" class="input" onClick= "match()">Random Fight!</button>
 	</div>
       <div id="user-container" class="bar">
 			<h1>Online Now</h1>
@@ -75,14 +77,10 @@ class MainPage(webapp2.RequestHandler):
     query = UserRole.query(ancestor=get_key_roles()).order(-UserRole.date)
     query = query.filter(UserRole.show == True)
     roles = query.fetch()
-    self.response.write("<table id ='rlist' style='margin-left: 10px;font-size: 24px;'>")
     for role in roles:
-      self.response.write("<tr>")
-      self.response.write("<td style='width:287px;'><a href='onlinefight?open="+role.key.urlsafe()+"'>"+role.name+"</a></td>")
-      self.response.write("</tr>")
-      
-    self.response.write("</table>")	
-              
+      self.response.write("<option value='"+role.key.urlsafe()+"'>"+role.name+"</option>")
+    self.response.write("</select>")
+	
   def get(self):
     self.registerUser()
     self.response.headers['Content-Type']="text/html"
