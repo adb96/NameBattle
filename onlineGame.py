@@ -121,6 +121,7 @@ class CheckRoom(webapp2.RequestHandler):
       newRoom.put()
       self.response.out.write("wait "+str(num))
     else:
+      currRoom = rooms[0]
       if currRoom.user1 == user.nickname():
         newRoom = Battle(parent=get_battle())
         newRoom.user1 = user.nickname()
