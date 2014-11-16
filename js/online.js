@@ -7,7 +7,13 @@ var roomnum ="";
  var upuser = setInterval(function(){
  	updateusers();
  },2000);
-
+function postParameters(xmlHttp, target, parameters) {
+  if (xmlHttp) {
+    xmlHttp.open("POST", target, true);
+    xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlHttp.send(parameters);
+  }
+}
  function updateusers(){
  	var xmlhttp1=new XMLHttpRequest();
 
@@ -37,12 +43,16 @@ var roomnum ="";
 			roomnum= re[1]
 			if (re[0] =="ok")
 			{
+				console.log('ok');
 				document.getElementById("roomNo").value = roomnum;
 				document.getElementById("ok").disabled =false;
 			}
 			else if (re[0] == "wait")
 			{
+				console.log('wait');
+				upuser = setInterval(function(){
 				wait();
+				},3000);
 			}
 			else{
 				console.log(re[0]);
@@ -50,41 +60,40 @@ var roomnum ="";
 	    }
 	  }
 	var key = document.getElementById("srole").value;
-	console.log(key);
-	xmlhttp1.open("GET","/onlineBegin",true);
-	xmlhttp1.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	var k = "rkey="+key;
 	
-	xmlhttp1.send('key='+key);
+	postParameters(xmlhttp1, '/onlineBegin', k);
 
  }
  function wait(){
 	var xmlhttp1=new XMLHttpRequest();
-	clearInterval(upuser)
+	
  	xmlhttp1.onreadystatechange=function()
 	  {
 	  if (xmlhttp1.readyState==4 && xmlhttp1.status==200)
 	    {
 			var re =xmlhttp1.responseText.split(" ");
-			roomnum= re[1]
+			roomnum= re[1];
 			if (re[0] =="ok")
 			{
+				console.log('ok');
+				clearInterval(upuser);
 				document.getElementById("roomNo").value = roomnum;
 				document.getElementById("ok").disabled =false;
 			}
 			else if (re[0] == "wait")
 			{
-				consolo.log("wait");
-				upuser = setInterval(function(){
-				wait();
-				},2000);
+				console.log("wait");
+				
 			}
 			else{
 				console.log(re[0]);
 			}
 	    }
 	  }
- 	xmlhttp1.open("GET","/waitnow",true);
-	xmlhttp1.send('roomNo='+roomnum);
+ 	var n = "roomNo="+roomnum;
+	console.log(n);
+	postParameters(xmlhttp1, '/waitnow', n);
 
  }
 
