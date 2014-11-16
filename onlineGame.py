@@ -143,7 +143,7 @@ class CheckRoom(webapp2.RequestHandler):
         currRoom.tempAtt2 = attr
         currRoom.state2 = True
         currRoom.put()
-        self.response.out.write("ok "+str(num))
+        self.response.out.write("ok "+str(currRoom.roomNo))
 
 
 class Wait(webapp2.RequestHandler):
@@ -180,7 +180,7 @@ class FightNow(webapp2.RequestHandler):
       room = rooms[0]
       attr1 = room.tempAtt1
       attr2 = room.tempAtt2
-      path = os.path.dirname(__file__)+ '/templates/battle.html'
+      path = os.path.join(os.path.dirname(__file__), '/templates/battle.html')
       if room.user1==users.get_current_user().nickname():
         p=1
       elif room.user2==users.get_current_user().nickname():
