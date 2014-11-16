@@ -107,7 +107,9 @@ class UserHandler(webapp2.RequestHandler):
 		users = UserInfo.query().fetch()
 		tmp=""
 		for user in users:
-			tmp+='<li class="useritem">'+user.user+'</li>\n'
+			if (user.date - datetime.now()) < 0 && (user.date - datetime.now()) > -1:
+				tmp+='<li class="useritem">'+user.user+'</li>\n'   #user has been on within a minute. Print that they're online
+				
 
 		self.response.write(tmp)
               
