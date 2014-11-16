@@ -112,7 +112,7 @@ class UserHandler(webapp2.RequestHandler):
 			current = datetime.now()
 			last = user.date
 			time_dif = (current-last).total_seconds()
-			if time_dif > 1*60:
+			if time_dif > 5*60:
 				pass
 			else:
 				tmp+='<li class="useritem">'+user.user+'</li>\n'   #user has been on within a minute. Print that they're online
