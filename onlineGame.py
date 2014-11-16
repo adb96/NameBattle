@@ -11,6 +11,11 @@ from datetime import datetime
 
 import webapp2
 
+def render_template(handler, templatename, templatevalues) :
+  path = os.path.join(os.path.dirname(__file__), 'templates/' + templatename)
+  html = template.render(path, templatevalues)
+  handler.response.out.write(html)
+
 
 class Attribute(ndb.Model):
   name = ndb.StringProperty(indexed=True)
@@ -180,7 +185,7 @@ class FightNow(webapp2.RequestHandler):
       room = rooms[0]
       attr1 = room.tempAtt1
       attr2 = room.tempAtt2
-      path = os.path.join(os.path.dirname(__file__), '/templates/battle.html')
+      #path = os.path.join(os.path.dirname(__file__), '/templates/battle.html')
       if room.user1==users.get_current_user().nickname():
         p=1
       elif room.user2==users.get_current_user().nickname():
@@ -196,7 +201,7 @@ class FightNow(webapp2.RequestHandler):
         "roomNum":room,
        }
     # reading and rendering the template
-      self.response.out.write(template.render(path, template_values))
+      render_template(self, 'battle.html', template_values)
 
 class P1(webapp2.RequestHandler):
   def post(self):
