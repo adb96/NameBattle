@@ -109,12 +109,12 @@ class CheckRoom(webapp2.RequestHandler):
       newRoom = Battle(parent=get_battle())
       newRoom.user1 = user.nickname()
       newRoom.attribute1 = attr
-      newRoom.tempatt1 = attr
+      newRoom.tempAtt1 = attr
       newRoom.state1 = True
       
       newRoom.user2 = ""
       newRoom.attribute2 = {}
-      newRoom.tempatt2 = {}
+      newRoom.tempAtt2 = {}
       newRoom.state2 = False
       newRoom.fightText = ""
       newRoom.roomNo = num
@@ -134,7 +134,7 @@ class CheckRoom(webapp2.RequestHandler):
         newRoom = Battle(parent=get_battle())
         newRoom.user1 = user.nickname()
         newRoom.attribute1 = attr
-        newRoom.tempatt1 = attr
+        newRoom.tempAtt1 = attr
         newRoom.state1 = True
       
         newRoom.user2 = ""
@@ -148,8 +148,9 @@ class CheckRoom(webapp2.RequestHandler):
       else:
         currRoom.user2 = user.nickname()
         currRoom.attribute2 = attr
-        currRoom.tempatt2 = attr
+        currRoom.tempAtt2 = attr
         currRoom.state2 = True
+		currRoom.put()
         self.response.out.write("ok "+str(num))
 >>>>>>> origin/master
 
