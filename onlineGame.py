@@ -7,6 +7,7 @@ from google.appengine.api import channel
 from google.appengine.api import users
 from google.appengine.ext import ndb
 from google.appengine.api import channel
+from datetime import datetime
 
 import webapp2
 
@@ -22,6 +23,9 @@ class Attribute(ndb.Model):
   wins=ndb.IntegerProperty(indexed=False)
   key = ndb.StringProperty(indexed=True)
 
+class UserInfo(ndb.Model):
+  user = ndb.StringProperty()
+  date = ndb.DateTimeProperty(auto_now_add=True)
 
 
 class Battle(ndb.Model) :
@@ -75,7 +79,12 @@ class MainPage(webapp2.RequestHandler):
 	
 class CheckRoom(webapp2.RequestHandler):
   def get(self):
-	keystring = self.request.get('key')
+    userFetched=UserInfo.query(UserInfo.user==users.get_current_user().nickname()).fetch(1)
+    user = userFetched[0]
+    user.date = datetime.now()
+    user.put()
+    
+    keystring = self.request.get('key')
     role = ndb.Key(urlsafe=keystring).get()
     user=users.get_current_user()
     
@@ -90,10 +99,10 @@ class CheckRoom(webapp2.RequestHandler):
     attr.defence =role.defence
     attr.key = role.key.urlsafe()
     
-		query = Battle.query(ancestor=get_battle())
+    query = Battle.query(ancestor=get_battle())
     num = len(query.fetch())+1
-		query = query.filter(Battle.user2=="").order(Battle.date)
-		rooms = query.fetch(1)
+    query = query.filter(Battle.user2=="").order(Battle.date)
+    rooms = query.fetch(1)
     if len(rooms) == 0:
       newRoom = Battle(parent=get_battle())
       newRoom.user1 = user.nickname()

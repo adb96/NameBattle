@@ -37,19 +37,54 @@ var roomnum ="";
 			roomnum= re[1]
 			if (re[0] =="ok")
 			{
-				
+				document.getElementById("roomNo").value = roomnum;
+				document.getElementById("ok").disabled =false;
 			}
 			else if (re[0] == "wait")
 			{
+				wait();
 			}
 			else{
 				console.log(re[0]);
 			}
 	    }
 	  }
- 	xmlhttp1.open("GET","/onlineBegin",true);
 	var key = document.getElementById("srole").value;
+	console.log(key);
+	xmlhttp1.open("GET","/onlineBegin",true);
+	xmlhttp1.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	
 	xmlhttp1.send('key='+key);
+
+ }
+ function wait(){
+	var xmlhttp1=new XMLHttpRequest();
+	clearInterval(upuser)
+ 	xmlhttp1.onreadystatechange=function()
+	  {
+	  if (xmlhttp1.readyState==4 && xmlhttp1.status==200)
+	    {
+			var re =xmlhttp1.responseText.split(" ");
+			roomnum= re[1]
+			if (re[0] =="ok")
+			{
+				document.getElementById("roomNo").value = roomnum;
+				document.getElementById("ok").disabled =false;
+			}
+			else if (re[0] == "wait")
+			{
+				consolo.log("wait");
+				upuser = setInterval(function(){
+				wait();
+				},2000);
+			}
+			else{
+				console.log(re[0]);
+			}
+	    }
+	  }
+ 	xmlhttp1.open("GET","/waitnow",true);
+	xmlhttp1.send('roomNo='+roomnum);
 
  }
 
