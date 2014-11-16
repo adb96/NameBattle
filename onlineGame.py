@@ -141,7 +141,7 @@ class CheckRoom(webapp2.RequestHandler):
         currRoom.attribute2 = attr
         currRoom.tempAtt2 = attr
         currRoom.state2 = True
-		currRoom.put()
+        currRoom.put()
         self.response.out.write("ok "+str(num))
 
 
