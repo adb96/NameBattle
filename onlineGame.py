@@ -121,15 +121,6 @@ class CheckRoom(webapp2.RequestHandler):
       newRoom.put()
       self.response.out.write("wait "+str(num))
     else:
-      currRoom = rooms[0]
-<<<<<<< HEAD
-      currRoom.user2 = user.nickname()
-      currRoom.attribute2 = attr
-      currRoom.tempatt2 = attr
-      currRoom.state2 = True
-	  currRoom.put()
-      self.response.out.write("ok "+str(num))
-=======
       if currRoom.user1 == user.nickname():
         newRoom = Battle(parent=get_battle())
         newRoom.user1 = user.nickname()
@@ -152,7 +143,7 @@ class CheckRoom(webapp2.RequestHandler):
         currRoom.state2 = True
 		currRoom.put()
         self.response.out.write("ok "+str(num))
->>>>>>> origin/master
+
 
 class Wait(webapp2.RequestHandler):
   def post(self):
