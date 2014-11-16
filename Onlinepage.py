@@ -43,16 +43,17 @@ HEADER = """
    </head>
    <body id = "titleback" class = "wide">
       <div id = "chat-container" class = "bar">
-      </div>
+		<h2>Here are your available roles"</h2>
+      
+    """
+FOOTER = """
+	</div>
       <div id="user-container" class="bar">
 			<h1>Online Now</h1>
 			<ul id="userlist">			
 			</ul>
-		  </div>
-      <div id="userRoles"><h2>Here are your available roles"</h2>
-    """
-FOOTER = """
-  </div></body></html>
+	</div>
+  </body></html>
   """
 
 class MainPage(webapp2.RequestHandler):
@@ -110,6 +111,6 @@ class UserHandler(webapp2.RequestHandler):
 app = webapp2.WSGIApplication([
   ('/online', MainPage),
   ('/time',TimeHandler),
-	('/users',UserHandler),
+  ('/users',UserHandler),
 ], debug=True)
 

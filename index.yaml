@@ -10,20 +10,6 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
-- kind: UserRole
-  ancestor: yes
-  properties:
-  - name: show
-  - name: date
-    direction: desc
-
-- kind: UserInfo
-  ancestor: no
-  properties:
-  - name: user
-  - name: date
-    direction: desc
-
 - kind: Battle
   ancestor: yes
   properties:
@@ -33,6 +19,16 @@ indexes:
   - name: state2
   - name: roomNo
   - name: date
-    direction: asc
 
-  
+- kind: UserInfo
+  properties:
+  - name: user
+  - name: date
+    direction: desc
+
+- kind: UserRole
+  ancestor: yes
+  properties:
+  - name: show
+  - name: date
+    direction: desc

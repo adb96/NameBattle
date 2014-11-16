@@ -41,9 +41,38 @@ class Battle(ndb.Model) :
 def get_battle():
 	return ndb.Key('user', 'battles')
 
+class MainPage(webapp2.RequestHandler):
+	def get(self):
+		HEADER = """
+<html>
+   <head>
+      <title>Online Battles</title>
+      <link rel="stylesheet" href="css/style.css">
+   </head>
+   <body id = "titleback" class = "wide">
+      <h2>Hello There</h2>
+  </body></html>
+  """
+		self.response.headers['Content-Type']="text/html"
+		self.response.write(HEADER)
+	def post(self):
+		HEADER = """
+<html>
+   <head>
+      <title>Online Battles</title>
+      <link rel="stylesheet" href="css/style.css">
+   </head>
+   <body id = "titleback" class = "wide">
+      <h2>Hello There</h2>
+  </body></html>
+  """
+		self.response.headers['Content-Type']="text/html"
+		self.response.write(HEADER)
+	
+	
 class CheckRoom(webapp2.RequestHandler):
   def get(self):
-		keystring = self.request.get('key')
+	keystring = self.request.get('key')
     role = ndb.Key(urlsafe=keystring).get()
     user=users.get_current_user()
     
@@ -153,6 +182,7 @@ class P2(webapp2.RequestHandler):
 
 
 app = webapp2.WSGIApplication([
+  ('/onlinefight', MainPage),
   ('/onlineBegin',CheckRoom),
   ('/waitnow',Wait),
   ('/beginow',FightNow),

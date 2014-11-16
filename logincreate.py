@@ -129,7 +129,7 @@ class ActionHandler(webapp2.RequestHandler):
 
 app = webapp2.WSGIApplication([
   ('/createmain', MainPage),
-  ('/create',  CreateRole), 
+  ('/create',  CreateRole), 
   ('/action',ActionHandler),
   (r'/', 'login.MainPage'),
 ], debug=True)
