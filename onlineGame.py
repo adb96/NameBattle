@@ -191,8 +191,8 @@ class FightNow(webapp2.RequestHandler):
         "attr1": attr1,
         "attr2": attr2,
         "player": p,
-		"token":token,
-		"roomNum":room,
+        "token":token,
+        "roomNum":room,
        }
     # reading and rendering the template
       self.response.out.write(template.render(path, template_values))
@@ -204,34 +204,34 @@ class P1(webapp2.RequestHandler):
     query = Battle.query(ancestor=get_battle())
     query = query.filter(Battle.roomNo == num)
     rooms = query.fetch()
-	room=room[0]
-	
-	p1=self.request.get('p1')
-	p1newstats=p1.split(" ")
-	p2=self.request.get('p2')
-	p2newstats=p2.split(" ")
-	p1attr=room.tempAtt1
-	p2attr=room.tempAtt2
-	
+    room=room[0]
+
+    p1=self.request.get('p1')
+    p1newstats=p1.split(" ")
+    p2=self.request.get('p2')
+    p2newstats=p2.split(" ")
+    p1attr=room.tempAtt1
+    p2attr=room.tempAtt2
+
 	#hp, attack, speed, defence, luck
     p1attr.atk = p1newstats[1]
     p1attr.hp = p1newstats[0]
     p1attr.speed = p1newstats[2]
     p1attr.luck = p1newstats[3]
     p1attr.defence = p1newstats[4]
-	
-	p2attr.atk = p2newstats[1]
+
+    p2attr.atk = p2newstats[1]
     p2attr.hp = p2newstats[0]
     p2attr.speed = p2newstats[2]
     p2attr.luck = p2newstats[3]
     p2attr.defence = p2newstats[4]
-	
-	rooms.put()
-	
+
+    rooms.put()
+
 	#this will be to send the message to player2 through the channel
 	#message will be built from what player1 uploads through post request
-	channel.sendMessage(rooms.user2+rooms.roomNo, message)
-	
+    #channel.sendMessage(rooms.user2+rooms.roomNo, message)
+
 class P2(webapp2.RequestHandler):
   def post(self):
     num = int(self.request.get('roomNo'))
