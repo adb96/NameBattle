@@ -6,6 +6,7 @@ from google.appengine.ext.webapp import template
 from google.appengine.api import channel
 from google.appengine.api import users
 from google.appengine.ext import ndb
+from google.appengine.api import channel
 
 import webapp2
 
@@ -151,18 +152,19 @@ class FightNow(webapp2.RequestHandler):
       room = rooms[0]
       attr1 = room.tempAtt1
       attr2 = room.tempAtt2
-      path = '/templates/battle.html'
+      path = os.path.dirname(__file__)+ '/templates/battle.html'
       if room.user1==users.get_current_user().nickname():
         p=1
       elif room.user2==users.get_current_user().nickname():
         p=2
       else:
         p=0 #error
-
+      token = channel.create_channel(users.get_current_user().nickname() + str(num))
       template_values = {
         "attr1": attr1,
         "attr2": attr2,
         "player": p,
+		"token":token
        }
     # reading and rendering the template
       self.response.out.write(template.render(path, template_values))
