@@ -48,6 +48,7 @@ HEADER = """
 	<div class="logincreate2" id="wholepage">
 	<div id="login">
       <div id = "chat-container" class = "bar">
+		<a style='display: inline-block;float: right;' href="/titlescreen"><button id="butt">Back</button></a>
 		<h2 style="color:white;margin-left:30%; margin-top:20%">Here are your available roles</h2>
 		<select style="margin-left:41%" name = "srole" id="srole">
     """
