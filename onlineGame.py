@@ -1,7 +1,6 @@
 import cgi
 import urllib
 import os
-import jinja2
 from google.appengine.ext.webapp import template
 from google.appengine.api import channel
 from google.appengine.api import users
