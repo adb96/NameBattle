@@ -1,6 +1,7 @@
 import cgi
 import urllib
 import os
+
 from google.appengine.ext.webapp import template
 from google.appengine.api import channel
 from google.appengine.api import users
@@ -8,12 +9,13 @@ from google.appengine.ext import ndb
 from google.appengine.api import channel
 from datetime import datetime
 
+import jinja2
 import webapp2
 
-def render_template(handler, templatename, templatevalues) :
-  path = os.path.join(os.path.dirname(__file__), '/templates/' + templatename)
-  html = template.render(path, templatevalues)
-  handler.response.out.write(html)
+def render_template(handler, templatevalues) :
+    path = os.path.join(os.path.dirname(__file__), 'templates/battle.html')
+    html = template.render(path, templatevalues)
+    handler.response.out.write(html)
 
 
 class Attribute(ndb.Model):
@@ -184,7 +186,6 @@ class FightNow(webapp2.RequestHandler):
       room = rooms[0]
       attr1 = room.tempAtt1
       attr2 = room.tempAtt2
-      #path = os.path.join(os.path.dirname(__file__), '/templates/battle.html')
       if room.user1==users.get_current_user().nickname():
         p=1
       elif room.user2==users.get_current_user().nickname():
@@ -200,7 +201,7 @@ class FightNow(webapp2.RequestHandler):
         "roomNum":room,
        }
     # reading and rendering the template
-      render_template(self, 'battle.html', template_values)
+      render_template(self, template_values)
 
 class P1(webapp2.RequestHandler):
   def post(self):
