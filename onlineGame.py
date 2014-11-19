@@ -11,7 +11,7 @@ from datetime import datetime
 import webapp2
 
 def render_template(handler, templatename, templatevalues) :
-  path = os.path.join(os.path.dirname(__file__), 'templates/' + templatename)
+  path = os.path.join(os.path.dirname(__file__), '/templates/' + templatename)
   html = template.render(path, templatevalues)
   handler.response.out.write(html)
 
