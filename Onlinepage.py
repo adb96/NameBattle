@@ -68,19 +68,20 @@ FOOTER = """
 class MainPage(webapp2.RequestHandler):
   
   def registerUser(self):
-		user = users.get_current_user()
-		if user is None:
-			self.redirect('/nosign')
-		userFetched=UserInfo.query(UserInfo.user==user.nickname()).fetch(1)
-		if  len(userFetched) == 0:
-			u = UserInfo()
-			u.user = user.nickname()
-			u.date=datetime.now()
-			u.put()	
-		else:
-			user = userFetched[0]
-			user.date = datetime.now()
-			user.put()
+        user = users.get_current_user()
+        if user:
+          userFetched=UserInfo.query(UserInfo.user==user.nickname()).fetch(1)
+          if  len(userFetched) == 0:
+              u = UserInfo()
+              u.user = user.nickname()
+              u.date=datetime.now()
+              u.put()	
+          else:
+              user = userFetched[0]
+              user.date = datetime.now()
+              user.put()
+        else:
+          self.redirect('/nosign')
       
   def print_roles(self):
     query = UserRole.query(ancestor=get_key_roles()).order(-UserRole.date)
@@ -91,11 +92,15 @@ class MainPage(webapp2.RequestHandler):
     self.response.write("</select>")
 	
   def get(self):
-    self.registerUser()
-    self.response.headers['Content-Type']="text/html"
-    self.response.write(HEADER)
-    self.print_roles()
-    self.response.write(FOOTER)
+    user = users.get_current_user()
+    if user:
+      self.registerUser()
+      self.response.headers['Content-Type']="text/html"
+      self.response.write(HEADER)
+      self.print_roles()
+      self.response.write(FOOTER)
+    else:
+      self.redirect('/nosign')
     
   
 

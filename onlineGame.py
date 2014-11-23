@@ -144,36 +144,39 @@ class Wait(webapp2.RequestHandler):
 
 class FightNow(webapp2.RequestHandler):
   def post(self):
-    num = int(self.request.get('roomNo')
-)
-    query = Battle.query(ancestor=get_battle())
-    query = query.filter(Battle.roomNo == num)
-    rooms = query.fetch()
+    user = users.get_current_user()
+    if user:
+      num = int(self.request.get('roomNo'))
+      query = Battle.query(ancestor=get_battle())
+      query = query.filter(Battle.roomNo == num)
+      rooms = query.fetch()
     
-    if len(rooms) == 0:
-      self.response.out.write("Error1")
-    elif len(rooms) > 1:
-      self.response.out.write("Error2")
-    else:
-      room = rooms[0]
-      attr1 = room.tempAtt1
-      attr2 = room.tempAtt2
-      if room.user1==users.get_current_user().nickname():
-        p=1
-      elif room.user2==users.get_current_user().nickname():
-        p=2
+      if len(rooms) == 0:
+        self.response.out.write("Error1")
+      elif len(rooms) > 1:
+        self.response.out.write("Error2")
       else:
-        p=0 #error
-      token = channel.create_channel(users.get_current_user().nickname() + str(num))
-      template_values = {
-        "attr1": attr1,
-        "attr2": attr2,
-        "player": p,
-        "token":token,
-        "roomNum":room.roomNo,
-       }
-    # reading and rendering the template
-      render_template(self, template_values)
+        room = rooms[0]
+        attr1 = room.tempAtt1
+        attr2 = room.tempAtt2
+        if room.user1==users.get_current_user().nickname():
+          p=1
+        elif room.user2==users.get_current_user().nickname():
+          p=2
+        else:
+          p=0 #error
+        token = channel.create_channel(users.get_current_user().nickname() + str(num))
+        template_values = {
+          "attr1": attr1,
+          "attr2": attr2,
+          "player": p,
+          "token":token,
+          "roomNum":room.roomNo,
+         }
+      # reading and rendering the template
+        render_template(self, template_values)
+    else:
+      self.redirect('/nosign')
 
 class P1(webapp2.RequestHandler):
   def post(self):
@@ -242,5 +245,6 @@ app = webapp2.WSGIApplication([
   ('/waitnow',Wait),
   ('/beginow',FightNow),
   ('/player1',P1),
-  ('/quit',Quit)
+  ('/quit',Quit),
+  (r'/nosign', 'Redirect.MainPage')
 ], debug=True)

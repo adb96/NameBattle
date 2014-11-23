@@ -94,22 +94,25 @@ END2="""
 
 class GotoF(webapp2.RequestHandler):
   def get(self):
-	user = users.get_current_user()
-	if user is None:
-		self.redirect('/nosign')
-    keystring = self.request.get('open')
-    role = ndb.Key(urlsafe=keystring).get()
-    self.response.headers['Content-Type']="text/html"
-    self.response.write(HEADER)
-    self.response.write(role.name+"'")
-    self.response.write(MID)
-    self.response.write(role.role+"'")
-    self.response.write(N)
-    self.response.write("<tr><td id='p1hp'>"+str(role.hp)+"</td><td id='p1atk'>"+str(role.atk)+"</td><td id='p1spd'>"+str(role.speed)+"</td><td id='p1def'>"+str(role.defence)+"</td><td id='p1lck'>"+str(role.luck)+"</td><td id = 'w'>"+str(role.wins))
-    self.response.write("""</td></tr></table>""")
-    self.response.write("<input type='hidden' style='z-index:99999;' name='key' id = 'key' value='"+ role.key.urlsafe()+"'></input>")
-    self.response.write(END1)
-    self.response.write(END2)
+    user = users.get_current_user()
+    if user:
+      keystring = self.request.get('open')
+      role = ndb.Key(urlsafe=keystring).get()
+      self.response.headers['Content-Type']="text/html"
+      self.response.write(HEADER)
+      self.response.write(role.name+"'")
+      self.response.write(MID)
+      self.response.write(role.role+"'")
+      self.response.write(N)
+      self.response.write("<tr><td id='p1hp'>"+str(role.hp)+"</td><td id='p1atk'>"+str(role.atk)+"</td><td id='p1spd'>"+str(role.speed)+"</td><td id='p1def'>"+str(role.defence)+"</td><td id='p1lck'>"+str(role.luck)+"</td><td id = 'w'>"+str(role.wins))
+      self.response.write("""</td></tr>
+</table>
+""")
+      self.response.write("<input type='hidden' style='z-index:99999;' name='key' id = 'key' value='"+ role.key.urlsafe()+"'></input>")
+      self.response.write(END1)
+      self.response.write(END2)
+    else:
+      self.redirect('/nosign')
 class UpdateWin(webapp2.RequestHandler):
   def post(self):
     keystring = self.request.get('pkey')

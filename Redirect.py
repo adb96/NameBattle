@@ -17,7 +17,7 @@ HEADER = """
     </div>
 	<p class = "titlebox">
 		This page is not available until logging in to the Namebattle application.
-		To log in to the application, go the the main application page by<ahef="namebattle.appspot.com">CLICKING HERE</a>
+		To log in to the application, go the the main application page by <a href="/"> CLICKING HERE </a>
 		and press the "CLICK TO BATTLE" button on the main page
 	</p>
 </body>

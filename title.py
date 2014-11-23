@@ -47,9 +47,11 @@ HEADER = """
 
 class MainPage(webapp2.RequestHandler):
   def get(self):
-	user = users.get_current_user()
-	if user is None:
-		self.redirect('/nosign')
+    user = users.get_current_user()
+    if user:
+      pass
+    else:
+      self.redirect('/nosign')
     self.response.headers['Content-Type']="text/html"
     self.response.write(HEADER);
 

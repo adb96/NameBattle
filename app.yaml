@@ -30,3 +30,5 @@ handlers:
   script: title.app
 - url: /beginow
   script: onlineGame.app
+- url: /nosign
+  script: Redirect.app

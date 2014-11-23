@@ -59,18 +59,20 @@ def get_key():
 class MainPage(webapp2.RequestHandler) :
   def get(self):
     user=users.get_current_user()
-	if user is None:
-		self.redirect('/nosign')
-    self.response.headers['Content-Type']="text/html"
-    self.response.write(HEADER)
-    self.response.write(user.nickname()+"""</h1><a style='display: inline-block;float: right;' href='"""+users.create_logout_url('/'))
-    self.response.write("""'><button id="butt">Logout</button></a>
-	<a style='display: inline-block;float: right;' href="/titlescreen"><button id="butt">Back</button></a></div>
+    if user:
+      self.response.headers['Content-Type']="text/html"
+      self.response.write(HEADER)
+      self.response.write(user.nickname()+"""</h1>
+    <a style='display: inline-block;float: right;' href='"""+users.create_logout_url('/'))
+      self.response.write("""'><button id="butt">Logout</button></a>
+    <a style='display: inline-block;float: right;' href="/titlescreen"><button id="butt">Back</button></a></div>
                       <div class = 'cd' style="float: left;">
                       <h2 id='textbord'>Your Roles:</h2>""")
-    self.print_roles()
-    self.response.write(MID)
-    self.response.write(FOOTER)
+      self.print_roles()
+      self.response.write(MID)
+      self.response.write(FOOTER)
+    else:
+      self.redirect('/nosign')
       
   def print_roles(self):
     query = UserRole.query(ancestor=get_key()).order(-UserRole.date)
