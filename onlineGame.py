@@ -16,6 +16,17 @@ def render_template(handler, templatevalues) :
     path = os.path.join(os.path.dirname(__file__), 'templates/battle.html')
     html = template.render(path, templatevalues)
     handler.response.out.write(html)
+class UserRole(ndb.Model) :
+  name=ndb.StringProperty(indexed=True)
+  role=ndb.StringProperty(indexed=True)
+  atk=ndb.IntegerProperty(indexed=False)
+  speed=ndb.IntegerProperty(indexed=False)
+  hp=ndb.IntegerProperty(indexed=False)
+  luck=ndb.IntegerProperty(indexed=False) 
+  defence=ndb.IntegerProperty(indexed=False)
+  wins=ndb.IntegerProperty(indexed=False)
+  show=ndb.BooleanProperty(indexed=True)
+  date = ndb.DateTimeProperty(auto_now_add=True)
 
 
 class Attribute(ndb.Model):
@@ -164,6 +175,12 @@ class FightNow(webapp2.RequestHandler):
         p=2
       else:
         p=0 #error
+	#ranking
+      query = UserRole.query().order(-UserRole.wins)
+      roles = query.fetch(10)
+      ranklist=""
+      for role in roles:
+        ranklist += "<li style='margin-left:24%;text-align:left;'>"+role.name+": "+str(role.wins)+"</li>"
       token = channel.create_channel(users.get_current_user().nickname() + str(num))
       template_values = {
         "attr1": attr1,
@@ -171,6 +188,7 @@ class FightNow(webapp2.RequestHandler):
         "player": p,
         "token":token,
         "roomNum":room,
+        "ranklist":ranklist
        }
     # reading and rendering the template
       render_template(self, template_values)
@@ -210,6 +228,8 @@ class P1(webapp2.RequestHandler):
     
 	#update the info for this battle
     rooms.put()
+
+
 
 	#this will be to send the message to player2 through the channel
 	#message will be built from what player1 uploads through post request
