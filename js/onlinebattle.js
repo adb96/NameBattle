@@ -103,6 +103,7 @@ openChannel=function() {
 			
 			
 		window.onload=function(){
+			console.log("loaded");
 			if(gamePlaying){
 				return;
 			}
@@ -125,9 +126,7 @@ openChannel=function() {
                 player1.identity=1;
                 player1.key = document.getElementById('key1').value;
                 
-				document.getElementById("bt").innerHTML="<h2>Option</h2>";
-				document.getElementById("bt").innerHTML+="<button style='margin-top: 30px;font-size: 16pt;font-family:Impact;' onclick='newF()'>New Fight!</button>";
-				document.getElementById("bt").innerHTML+="<br><button style='margin-top: 30px;font-size: 16pt;font-family:Impact;' onclick='replay()'>Re-Fight!</button> <form  method='get' action='/createmain'> <button style='margin-top: 30px;font-size: 16pt;font-family:Impact;'>Change Role</button> </form>";
+				
         
 //player1 saver#############################
                 t1.hp=p1hphold;
@@ -686,70 +685,6 @@ function updateWinner(key, player) {
        }
      }     
      
-//##########################replay##################
-function reset(){
-   gameOverFlag=false;
-   newAttack ="";
-   document.getElementById("r0").innerHTML=newAttack;
-   document.getElementById('hp1').style.width = "100%";
-   document.getElementById('hp2').style.width = "100%";
-   
-   player1.hp=p1saveHP;
-   player1.def=t1.def;
-   player1.atk=t1.atk;
-   player1.speed=t1.speed;
-   player1.luck=t1.luck;
-   player1.counter=0;
-   
-   document.getElementById("p1atk").innerText = player1.atk;
-   document.getElementById("p1spd").innerText =player1.speed;
-   document.getElementById("p1hp").innerText = player1.hp;
-   document.getElementById("p1def").innerText =player1.def;
-	 document.getElementById("p1lck").innerText= player1.luck;
-
-
-}
-function replay(){
-  
-   reset();
-   player2.hp=p2saveHP;
-   player2.def=t2.def;
-   player2.atk=t2.atk;
-   player2.speed=t2.speed;
-   player2.luck=t2.luck;
-   player2.counter=0;
-   
-   player1.cntsp=1+0.01*player1.speed;
-   player2.cntsp=1+0.01*player2.speed;
-               
-
-   document.getElementById("p2hp").innerText=player2.hp;
-	 document.getElementById("p2atk").innerText=player2.atk;
-	 document.getElementById("p2spd").innerText=player2.speed;
-	 document.getElementById("p2def").innerText=player2.def;
-	 document.getElementById("p2lck").innerText=player2.luck;
-   
-   clearInterval(intervalID);
-   newAttack+="Fight Begins!<br>"
-	 document.getElementById("r0").innerHTML=newAttack;
-   intervalID=setInterval(function() { attackFunc() }, 3000)
-;   
-}
-//######new game####
-function newF(){
-   reset();
-   document.getElementById("name2").value="";
-   document.getElementById("p2hp").innerText="";
-	 document.getElementById("p2atk").innerText="";
-	 document.getElementById("p2spd").innerText="";
-	 document.getElementById("p2def").innerText="";
-	 document.getElementById("p2lck").innerText="";
-   
-   clearInterval(intervalID);
-   document.getElementById("bt").innerHTML="<h2>Option</h2><button style='margin-top: 30px;font-size: 16pt;font-family:Impact;' onclick='startUp()'>Fight!</button> <form  method='get' action='/createmain'> <button style='margin-top: 50px;font-size: 16pt;font-family:Impact;'>Change Role</button> </form>";
-}
-
-
 
 
  function base64_encode(data) {
