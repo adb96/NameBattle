@@ -34,7 +34,7 @@ function postParameters(xmlHttp, target, parameters) {
   function match(){
  	displayInfo();
 	var xmlhttp1=new XMLHttpRequest();
-	clearInterval(upuser)
+	clearInterval(upuser);
  	xmlhttp1.onreadystatechange=function()
 	  {
 	  if (xmlhttp1.readyState==4 && xmlhttp1.status==200)
@@ -112,6 +112,14 @@ function initTime(){
   
   xmlhttp.send();
 }
+function quit(){
+  var xmlhttp=new XMLHttpRequest();
+  var n = "RoomNo="+roomnum;
+  
+  postParameters(xmlhttp, '/quit', n);
+
+}
+
 
 function showUsers(){
   document.getElementById('user-container').style.display="block";
@@ -135,5 +143,10 @@ function displayInfo(){
 	document.getElementById("close").onclick=function(event){
 		document.getElementById("msg1").style.display="none";
 		document.getElementById("wholepage").style.opacity="1";
+		quit();
+		clearInterval(upuser);
+		upuser = setInterval(function(){
+			updateusers();
+		},2000);
 	};
 }
