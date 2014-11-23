@@ -59,6 +59,8 @@ def get_key():
 class MainPage(webapp2.RequestHandler) :
   def get(self):
     user=users.get_current_user()
+	if user is None:
+		self.redirect('/nosign')
     self.response.headers['Content-Type']="text/html"
     self.response.write(HEADER)
     self.response.write(user.nickname()+"""</h1><a style='display: inline-block;float: right;' href='"""+users.create_logout_url('/'))
@@ -130,7 +132,8 @@ class ActionHandler(webapp2.RequestHandler):
 
 app = webapp2.WSGIApplication([
   ('/createmain', MainPage),
-  ('/create',  CreateRole), 
+  ('/create',  CreateRole),
   ('/action',ActionHandler),
   (r'/', 'login.MainPage'),
+  (r'/nosign', 'Redirect.MainPage'),
 ], debug=True)

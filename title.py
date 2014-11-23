@@ -47,6 +47,9 @@ HEADER = """
 
 class MainPage(webapp2.RequestHandler):
   def get(self):
+	user = users.get_current_user()
+	if user is None:
+		self.redirect('/nosign')
     self.response.headers['Content-Type']="text/html"
     self.response.write(HEADER);
 
@@ -54,4 +57,5 @@ app = webapp2.WSGIApplication([
   ('/titlescreen', MainPage),
   (r'/online', 'Onlinepage.MainPage'),
   (r'/createmain', 'logincreate.MainPage'),
+  (r'/nosign', 'Redirect.MainPage'),
 ], debug=True)

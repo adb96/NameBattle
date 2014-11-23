@@ -69,6 +69,8 @@ class MainPage(webapp2.RequestHandler):
   
   def registerUser(self):
 		user = users.get_current_user()
+		if user is None:
+			self.redirect('/nosign')
 		userFetched=UserInfo.query(UserInfo.user==user.nickname()).fetch(1)
 		if  len(userFetched) == 0:
 			u = UserInfo()
@@ -124,5 +126,6 @@ app = webapp2.WSGIApplication([
   ('/online', MainPage),
   ('/time',TimeHandler),
   ('/users',UserHandler),
+  (r'/nosign', 'Redirect.MainPage'),
 ], debug=True)
 

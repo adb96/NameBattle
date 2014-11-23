@@ -94,6 +94,9 @@ END2="""
 
 class GotoF(webapp2.RequestHandler):
   def get(self):
+	user = users.get_current_user()
+	if user is None:
+		self.redirect('/nosign')
     keystring = self.request.get('open')
     role = ndb.Key(urlsafe=keystring).get()
     self.response.headers['Content-Type']="text/html"
@@ -120,4 +123,5 @@ app = webapp2.WSGIApplication([
   ('/begin',GotoF),
   ('/update', UpdateWin),
   (r'/createmain', 'logincreate.MainPage'),
+  (r'/nosign', 'Redirect.MainPage'),
 ], debug=True)
