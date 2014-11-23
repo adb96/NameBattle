@@ -183,8 +183,6 @@ class P1(webapp2.RequestHandler):
     query = query.filter(Battle.roomNo == num)
     rooms = query.fetch()
     room=rooms[0]
-
-	over=self.request.get('over')
 	
     p1=self.request.get('p1')
     p1newstats=p1.split(" ")
@@ -207,11 +205,11 @@ class P1(webapp2.RequestHandler):
     p2attr.defence = p2newstats[4]
 
 	#keep it in base64 encoding
-	battlePhrase=self.request.get('battle')
-	room.fightText=battlePhrase
+    battlePhrase=self.request.get('battle')
+    room.fightText=battlePhrase
     
 	#update the info for this battle
-	rooms.put()
+    rooms.put()
 
 	#this will be to send the message to player2 through the channel
 	#message will be built from what player1 uploads through post request

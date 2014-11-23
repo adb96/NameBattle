@@ -20,7 +20,6 @@ function postParameters(xmlHttp, target, parameters) {
   }
 }
 
-window.onload=startUp();
 
 //when a message is recieved, handle it here....
 //this should be universal for both clients
@@ -53,7 +52,7 @@ onMessage=function(m){
 };
 
 //only player 2 calls this to update the stats, since p1 will do it with the game engine as is runs
-updateStats(){
+function updateStats(){
 	//update p1 stats on page
 	document.getElementById("p1def").innerText=player1.def;
 	document.getElementById("p1lck").innerText=player1.luck;
@@ -69,7 +68,7 @@ updateStats(){
 	  
 	
 openChannel=function() {
-	var token='{{ token }}';
+	var token=document.getElementById('token').value;
 	var channel = new goog.appengine.Channel(token);
 	var handler={
 		'onopen': function() {},
@@ -78,7 +77,7 @@ openChannel=function() {
 		'onclose': function() {}
 	};
 	var socket=channel.open(handler);
-	socket.onopen=onOpened;
+	//socket.onopen=onOpened;
 	socket.onmessage=onMessage;
 }  
 	  
@@ -100,12 +99,12 @@ openChannel=function() {
       var gamePlaying=false;
 			
 			
-		function startUp(){
+		window.onload=function(){
 			if(gamePlaying){
 				return;
 			}
-			p2starter=document.getElementById("player").value;
-				if(p1starter==2){
+			var p2starter=parseInt(document.getElementById("player").value);
+				if(p2starter==2){
 					openChannel();
 				}
                 gamePlaying=true;
@@ -136,11 +135,12 @@ openChannel=function() {
                 
                 
                 player2.name=document.getElementById("name2").value;
-                var roleholder2=document.getElementById("role2");
-                player2.role=roleholder2.options[roleholder2.selectedIndex].text;
+				player2.role=document.getElementById("role2").value;
+                //var roleholder2=document.getElementById("role2");
+                //player2.role=roleholder2.options[roleholder2.selectedIndex].text;
                 player2.atk=document.getElementById("p2atk").innerText;
                 player2.speed=document.getElementById("p2spd").innerText;
-                var p2hphold=parseInt(docment.getElementById("p2hp").innerText);
+                var p2hphold=parseInt(document.getElementById("p2hp").innerText);
                 p2saveHP=p2hphold;
                 player2.hp=p2hphold;
                 player2.def=document.getElementById("p2def").innerText;
@@ -171,11 +171,11 @@ openChannel=function() {
 				
 				document.getElementById("r0").innerHTML=newAttack;
 				
-				p1starter=document.getElementById("player").value;
+				var p1starter=parseInt(document.getElementById("player").value);
 				if(p1starter==1){
 					intervalID=setInterval(function() { attackFunc() }, 3000);
 				}
-			}
+			};
 			
 			//returns random # between min (inclusive) and max (exclusive)
 			function getRandom(min, max){
