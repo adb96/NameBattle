@@ -214,25 +214,33 @@ class P1(webapp2.RequestHandler):
 	#this will be to send the message to player2 through the channel
 	#message will be built from what player1 uploads through post request
     gameUpdate={
-	  'p1atk': p1attr.atk,
-	  'p1hp': p1attr.hp,
-	  'p1speed': p1attr.speed,
-	  'p1luck': p1attr.luck,
-	  'p1def': p1attr.defence,
-	  'p2atk': p2attr.atk,
-	  'p2hp': p2attr.hp,
-	  'p2speed': p2attr.speed,
-	  'p2luck': p2attr.luck,
-	  'p2def': p2attr.defence,
-	  'battle': battlePhrase
-	}
+      'p1atk': p1attr.atk,
+      'p1hp': p1attr.hp,
+      'p1speed': p1attr.speed,
+      'p1luck': p1attr.luck,
+      'p1def': p1attr.defence,
+      'p2atk': p2attr.atk,
+      'p2hp': p2attr.hp,
+      'p2speed': p2attr.speed,
+      'p2luck': p2attr.luck,
+      'p2def': p2attr.defence,
+      'battle': battlePhrase
+    }
     message=simplejson.dumps(gameUpdate)
     #channel.sendMessage(rooms.user1+rooms.roomNo, message)
     channel.send_message(room.user2+str(room.roomNo), message)
+	
+class Quit(webapp2.RequestHandler):
+  def post(self):
+    num = int(self.request.get('RoomNo'))
+    query = Battle.query(ancestor=get_battle())
+    query = query.filter(Battle.roomNo == num)
+    room = query.fetch(1)[0].key.delete()
 
 app = webapp2.WSGIApplication([
   ('/onlineBegin',CheckRoom),
   ('/waitnow',Wait),
   ('/beginow',FightNow),
-  ('/player1',P1)
+  ('/player1',P1),
+  ('/quit',Quit)
 ], debug=True)
