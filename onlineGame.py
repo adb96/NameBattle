@@ -187,12 +187,8 @@ class FightNow(webapp2.RequestHandler):
         "attr2": attr2,
         "player": p,
         "token":token,
-<<<<<<< HEAD
         "roomNum":room,
         "ranklist":ranklist
-=======
-        "roomNum":room.roomNo,
->>>>>>> origin/master
        }
     # reading and rendering the template
       render_template(self, template_values)
