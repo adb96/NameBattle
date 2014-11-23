@@ -155,7 +155,7 @@ class Wait(webapp2.RequestHandler):
 
 class FightNow(webapp2.RequestHandler):
   def post(self):
-    num = int(self.request.get('roomNo')
+    num = int(self.request.get('RoomNo')
 )
     query = Battle.query(ancestor=get_battle())
     query = query.filter(Battle.roomNo == num)

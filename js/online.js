@@ -30,6 +30,12 @@ function postParameters(xmlHttp, target, parameters) {
 	xmlhttp1.send();
 
  }
+ function ok(){
+ var xmlhttp=new XMLHttpRequest();
+  var n = "RoomNo="+roomnum;
+  
+  postParameters(xmlhttp, '/beginow', n);
+ }
 
   function match(){
  	displayInfo();
@@ -44,8 +50,8 @@ function postParameters(xmlHttp, target, parameters) {
 			if (re[0] =="ok")
 			{
 				console.log('ok');
-				document.getElementById("roomNo").value = roomnum;
-				document.getElementById("ok").disabled =false;
+				
+				ok();
 			}
 			else if (re[0] == "wait")
 			{
@@ -77,9 +83,9 @@ function postParameters(xmlHttp, target, parameters) {
 			if (re[0] =="ok")
 			{
 				console.log('ok');
+				
 				clearInterval(upuser);
-				document.getElementById("roomNo").value = roomnum;
-				document.getElementById("ok").disabled =false;
+				ok();
 			}
 			else if (re[0] == "wait")
 			{
