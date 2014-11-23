@@ -49,6 +49,8 @@ onMessage=function(m){
 	
 	//update the battle text, remembering to decode
 	document.getElementById("r0").innerHTML=newState.battle;
+	var box = document.getElementById('disB');
+    box.scrollTop = box.scrollHeight;
 };
 
 //only player 2 calls this to update the stats, since p1 will do it with the game engine as is runs
@@ -275,11 +277,28 @@ openChannel=function() {
       function gameOver(winner, loser){
                 newAttack+="["+loser.name+"]<font color='red'> Lose</font> and ["+winner.name+"] <font color='green'>Win!</font>";
                 newAttack+="<br>";
-				        document.getElementById("r0").innerHTML=newAttack;
+				document.getElementById("r0").innerHTML=newAttack;
                 gamePlaying=false; 
                 var box = document.getElementById('disB');
                 box.scrollTop = box.scrollHeight;
                 clearInterval(intervalID);
+				
+				//build the AJAX reponses and send them...
+				//the order for the stats is hp, attack, speed, defence, luck
+				var sp=" ";
+				var p1stats=(player1.hp).toString()+sp+(player1.atk).toString()+sp+(player1.speed).toString()+sp+(player1.def).toString()+sp+(player1.luck).toString();
+				var p2stats=(player2.hp).toString()+sp+(player2.atk).toString()+sp+(player2.speed).toString()+sp+(player2.def).toString()+sp+(player2.luck).toString();
+				//and newattack has the new string to store
+				var xmlHttp = createXmlHttp();
+				var isFinished="over="+gameOverFlag;
+				var roomNum="roomNum="+(document.getElementById("roomNum").value).toString();
+				console.log(roomNum);
+				var player1info="p1="+p1stats;
+				console.log(player1info);
+				var player2info="p2="+p2stats;
+				console.log(player2info);
+				var p=isFinished+'&'+roomNum+'&'+player1info+'&'+player2info+'&'+'battle='+newAttack;
+				postParameters(xmlHttp, '/player1', p);
       }
 			
 function updateWinner(key, player) {
