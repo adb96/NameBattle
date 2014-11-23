@@ -27,18 +27,18 @@ onMessage=function(m){
 	newState=JSON.parse(m.data);
 	
 	//player1 stats from JSON response in channel
-	player1.atk=newState.p1atk;
-	player1.hp=newState.p1hp;
-	player1.def=newState.p1def;
-	player1.spd=newState.p1speed;
-	player1.luck=newState.p1luck;
+	player1.atk=parseInt(newState.p1atk);
+	player1.hp=parseInt(newState.p1hp);
+	player1.def=parseInt(newState.p1def);
+	player1.spd=parseInt(newState.p1speed);
+	player1.luck=parseInt(newState.p1luck);
 	
 	//player2 stats from JSON response in channel
-	player2.atk=newState.p2atk;
-	player2.hp=newState.p2hp;
-	player2.def=newState.p2def;
-	player2.spd=newState.p2speed;
-	player2.luck=newState.p2luck;
+	player2.atk=parseInt(newState.p2atk);
+	player2.hp=parseInt(newState.p2hp);
+	player2.def=parseInt(newState.p2def);
+	player2.spd=parseInt(newState.p2speed);
+	player2.luck=parseInt(newState.p2luck);
 	
 	//get the battle text from the JSON response in channel
 	newBattleText=newState.battle;
@@ -48,12 +48,13 @@ onMessage=function(m){
 	updateStats();
 	
 	//update the battle text, remembering to decode
-	document.getElementById("r0").innerHTML=base64_decode(newState.battle);
+	document.getElementById("r0").innerHTML=newState.battle;
 };
 
 //only player 2 calls this to update the stats, since p1 will do it with the game engine as is runs
 function updateStats(){
 	//update p1 stats on page
+	document.getElementById("p1def").innerText=player1.def;
 	document.getElementById("p1def").innerText=player1.def;
 	document.getElementById("p1lck").innerText=player1.luck;
     document.getElementById("p1atk").innerText=player1.atk;
@@ -144,7 +145,7 @@ openChannel=function() {
                 p2saveHP=p2hphold;
                 player2.hp=p2hphold;
                 player2.def=document.getElementById("p2def").innerText;
-				player2.luck=getElementById("p2lck").innerText;
+				player2.luck=document.getElementById("p2lck").innerText;
                 player2.counter=0;
                 player2.identity=2;
 				player2.key=document.getElementById("key2").value;
@@ -188,7 +189,7 @@ openChannel=function() {
 				document.getElementById("p2hp").innerHTML=p2hp;
           
 				var chp1= Math.floor(p1hp/p1saveHP*100)+"%";
-				var chp2= Math.floor(p2hp.hp/p2saveHP*100)+"%";
+				var chp2= Math.floor(p2hp/p2saveHP*100)+"%";
 				//console.log(chp1+" "+chp2);
 				if (p1hp>0) {
 					document.getElementById('hp1').style.width = chp1;
@@ -212,7 +213,7 @@ openChannel=function() {
 				
 				if(!gameOverFlag){
 					//build the new attack phrase...
-					newAttack.docment.getElementById("r0").innerHTML;
+					newAttack=document.getElementById("r0").innerHTML;
 					newAttack+="["+player.name+"]";
 				if(turnAttack.type==0){
 					newAttack+=" used <font color='#0000FF'>"+turnAttack.ability+"</font>, ["+target.name+"] lost <font color='red'>"+turnAttack.damage+"</font> HP";
@@ -253,15 +254,18 @@ openChannel=function() {
 				//build the AJAX reponses and send them...
 				//the order for the stats is hp, attack, speed, defence, luck
 				var sp=" ";
-				var p1stats=str(player1.hp)+sp+str(player1.atk)+sp+str(player1.speed)+sp+str(player1.def)+sp+str(player1.luck);
-				var p2stats=str(player2.hp)+sp+str(player2.atk)+sp+str(player2.speed)+sp+str(player2.def)+sp+str(player2.luck);
+				var p1stats=(player1.hp).toString()+sp+(player1.atk).toString()+sp+(player1.speed).toString()+sp+(player1.def).toString()+sp+(player1.luck).toString();
+				var p2stats=(player2.hp).toString()+sp+(player2.atk).toString()+sp+(player2.speed).toString()+sp+(player2.def).toString()+sp+(player2.luck).toString();
 				//and newattack has the new string to store
 				var xmlHttp = createXmlHttp();
 				var isFinished="over="+gameOverFlag;
-				var roomNum="roomNum="+str(document.getElementById("roomNum"));
+				var roomNum="roomNum="+(document.getElementById("roomNum").value).toString();
+				console.log(roomNum);
 				var player1info="p1="+p1stats;
+				console.log(player1info);
 				var player2info="p2="+p2stats;
-				var p=isFinished+'&'+roomNum+'&'+player1info+'&'+player2info+'&'+'battle='+base64_encode(newAttack);
+				console.log(player2info);
+				var p=isFinished+'&'+roomNum+'&'+player1info+'&'+player2info+'&'+'battle='+newAttack;
 				postParameters(xmlHttp, '/player1', p);
 			}
 		
@@ -278,6 +282,31 @@ openChannel=function() {
                 clearInterval(intervalID);
       }
 			
+function updateWinner(key, player) {
+  var xmlHttp = createXmlHttp();
+  var p = "pkey="+key;
+  // onreadystatechange will be called every time the state of the XML HTTP object changes
+  xmlHttp.onreadystatechange = function() {
+  
+    // we really only care about 4 (response complete) here.
+    if (xmlHttp.readyState == 4  && xmlHttp.status==200) {
+      // we parse the content of the response
+     
+      var newWin = xmlHttp.responseText;
+      console.log(newWin);
+      var s =document.getElementById('w'+player.toString());
+      
+      s.innerHTML = parseInt(newWin);
+      // we need to know what to expect here; we're assuming that there will be 
+      // first_name and last_name fields.
+     
+    }
+  }
+  
+  postParameters(xmlHttp, '/update', p);
+ 
+}
+			
 	function attackFunc(){
        // clearInterval(intervalID);
         if(player2.hp<=0 && player2.hp<player1.hp){
@@ -285,7 +314,7 @@ openChannel=function() {
           gameOver(player1, player2);
           console.log("GAME OVER FUNCTION CALLED");
           //console.log(player1.key);
-          updateWins(player1.key);
+          updateWinner(player1.key, 1);
     
           
         }
@@ -293,6 +322,7 @@ openChannel=function() {
           console.log("GAME OVER FUNCTION CALLED");
           gameOverFlag=true;
           gameOver(player2, player1);
+		  updateWinner(player2.key, 2);
         }
  
        // if(!gameOverFlag){
@@ -308,7 +338,7 @@ openChannel=function() {
             break;
           }
 				}
-        console.log(player1.counter+" "+ player2.counter);
+        //console.log(player1.counter+" "+ player2.counter);
 				if(player1.counter>player2.counter){
 					    damageUpdate(player1, player2, p1saveHP);
               updateRows(player1, player2);
