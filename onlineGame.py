@@ -1,20 +1,21 @@
 import cgi
 import urllib
 import os
-import jinja2
+
+from django.utils import simplejson
 from google.appengine.ext.webapp import template
 from google.appengine.api import channel
 from google.appengine.api import users
 from google.appengine.ext import ndb
-from google.appengine.api import channel
 from datetime import datetime
 
+import jinja2
 import webapp2
 
-def render_template(handler, templatename, templatevalues) :
-  path = os.path.join(os.path.dirname(__file__), 'templates/' + templatename)
-  html = template.render(path, templatevalues)
-  handler.response.out.write(html)
+def render_template(handler, templatevalues) :
+    path = os.path.join(os.path.dirname(__file__), 'templates/battle.html')
+    html = template.render(path, templatevalues)
+    handler.response.out.write(html)
 
 
 class Attribute(ndb.Model):
@@ -52,34 +53,6 @@ class Battle(ndb.Model) :
  
 def get_battle():
 	return ndb.Key('user', 'battles')
-
-class MainPage(webapp2.RequestHandler):
-	def get(self):
-		HEADER = """
-<html>
-   <head>
-      <title>Online Battles</title>
-      <link rel="stylesheet" href="css/style.css">
-   </head>
-   <body id = "titleback" class = "wide">
-      <h2>Hello There</h2>
-  </body></html>
-  """
-		self.response.headers['Content-Type']="text/html"
-		self.response.write(HEADER)
-	def post(self):
-		HEADER = """
-<html>
-   <head>
-      <title>Online Battles</title>
-      <link rel="stylesheet" href="css/style.css">
-   </head>
-   <body id = "titleback" class = "wide">
-      <h2>Hello There</h2>
-  </body></html>
-  """
-		self.response.headers['Content-Type']="text/html"
-		self.response.write(HEADER)
 	
 	
 class CheckRoom(webapp2.RequestHandler):
@@ -185,7 +158,6 @@ class FightNow(webapp2.RequestHandler):
       room = rooms[0]
       attr1 = room.tempAtt1
       attr2 = room.tempAtt2
-      #path = os.path.join(os.path.dirname(__file__), '/templates/battle.html')
       if room.user1==users.get_current_user().nickname():
         p=1
       elif room.user2==users.get_current_user().nickname():
@@ -198,20 +170,20 @@ class FightNow(webapp2.RequestHandler):
         "attr2": attr2,
         "player": p,
         "token":token,
-        "roomNum":room,
+        "roomNum":room.roomNo,
        }
     # reading and rendering the template
-      render_template(self, 'battle.html', template_values)
+      render_template(self, template_values)
 
 class P1(webapp2.RequestHandler):
   def post(self):
-    num = int(self.request.get('roomNo'))
+    num = int(self.request.get('roomNum'))
     #staff to update
     query = Battle.query(ancestor=get_battle())
     query = query.filter(Battle.roomNo == num)
     rooms = query.fetch()
-    room=room[0]
-
+    room=rooms[0]
+	
     p1=self.request.get('p1')
     p1newstats=p1.split(" ")
     p2=self.request.get('p2')
@@ -220,37 +192,55 @@ class P1(webapp2.RequestHandler):
     p2attr=room.tempAtt2
 
 	#hp, attack, speed, defence, luck
-    p1attr.atk = p1newstats[1]
-    p1attr.hp = p1newstats[0]
-    p1attr.speed = p1newstats[2]
-    p1attr.luck = p1newstats[3]
-    p1attr.defence = p1newstats[4]
+    p1attr.atk = int(p1newstats[1])
+    p1attr.hp = int(p1newstats[0])
+    p1attr.speed = int(p1newstats[2])
+    p1attr.luck = int(p1newstats[3])
+    p1attr.defence = int(p1newstats[4])
 
-    p2attr.atk = p2newstats[1]
-    p2attr.hp = p2newstats[0]
-    p2attr.speed = p2newstats[2]
-    p2attr.luck = p2newstats[3]
-    p2attr.defence = p2newstats[4]
+    p2attr.atk = int(p2newstats[1])
+    p2attr.hp = int(p2newstats[0])
+    p2attr.speed = int(p2newstats[2])
+    p2attr.luck = int(p2newstats[3])
+    p2attr.defence = int(p2newstats[4])
 
-    rooms.put()
+	#keep it in base64 encoding
+    battlePhrase=self.request.get('battle')
+    room.fightText=battlePhrase
+    
+	#update the info for this battle
+    room.put()
 
 	#this will be to send the message to player2 through the channel
 	#message will be built from what player1 uploads through post request
-    #channel.sendMessage(rooms.user2+rooms.roomNo, message)
-
-class P2(webapp2.RequestHandler):
+    gameUpdate={
+      'p1atk': p1attr.atk,
+      'p1hp': p1attr.hp,
+      'p1speed': p1attr.speed,
+      'p1luck': p1attr.luck,
+      'p1def': p1attr.defence,
+      'p2atk': p2attr.atk,
+      'p2hp': p2attr.hp,
+      'p2speed': p2attr.speed,
+      'p2luck': p2attr.luck,
+      'p2def': p2attr.defence,
+      'battle': battlePhrase
+    }
+    message=simplejson.dumps(gameUpdate)
+    #channel.sendMessage(rooms.user1+rooms.roomNo, message)
+    channel.send_message(room.user2+str(room.roomNo), message)
+	
+class Quit(webapp2.RequestHandler):
   def post(self):
-    num = int(self.request.get('roomNo'))
+    num = int(self.request.get('RoomNo'))
     query = Battle.query(ancestor=get_battle())
     query = query.filter(Battle.roomNo == num)
-    rooms = query.fetch()
-
+    room = query.fetch(1)[0].key.delete()
 
 app = webapp2.WSGIApplication([
-  ('/onlinefight', MainPage),
   ('/onlineBegin',CheckRoom),
   ('/waitnow',Wait),
   ('/beginow',FightNow),
   ('/player1',P1),
-  ('/player2',P2)
+  ('/quit',Quit)
 ], debug=True)
