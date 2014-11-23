@@ -50,11 +50,10 @@ font-family: Cursive;">Role:<input type="text" size="8" name="role1" id = "role1
 <div class = 'buttons' id = 'bt'>
 	<h2>Option</h2>
 
-	<button style="margin-top: 25%;font-size: 16pt;font-family:Impact;">Fight!</button>
 
-  <form  method="get" action="/createmain">
+  <form  method="get" action="/online">
 
-  <button style="margin-top: 30%;font-size: 16pt;font-family:Impact;">Change Role</button>
+  <button style="margin-top: 30%;font-size: 16pt;font-family:Impact;" id ='back'disabled>Back</button>
   </form>
 </div>
 	
@@ -66,10 +65,7 @@ font-family: Cursive;">Role:<input type="text" size="8" name="role1" id = "role1
 	<div class='ranking'>
 	<h2>Ranking</h2>
 	<ol id = 'rank'>
-		<li></li>
-		<li></li>
-		<li></li>
-		<li></li>
+		{{ranklist}}
 	</ol>
 	</div>
 </div>

@@ -42,9 +42,7 @@ HEADER = """
       <script type="text/javascript" src="js/online.js"></script>
    </head>
    <body id = "titleback" class = "wide">
-	<div class="msgsmall" id="msg1" style:"height:20%"><p class="closealign"></p><div class="closealign"><br><br><br><form action="/beginow" method="post">
-	<input type='hidden' style='z-index:99999;' name='roomNo' id ='roomNo' >
-	<button type="submit" id="ok" disabled>Fight</button></form><button id="close">Close</button></div></div>
+	<div class="msgsmall" id="msg1" style:"height:20%"><p class="closealign"></p><div class="closealign"><br><br><br><button id="close">Close</button></div></div>
 	<div class="logincreate2" id="wholepage">
 	<div id="login">
       <div id = "chat-container" class = "bar">

@@ -5,6 +5,17 @@ from google.appengine.ext.webapp import template
 from google.appengine.api import users
 from google.appengine.ext import ndb
 
+class UserRole(ndb.Model) :
+  name=ndb.StringProperty(indexed=True)
+  role=ndb.StringProperty(indexed=True)
+  atk=ndb.IntegerProperty(indexed=False)
+  speed=ndb.IntegerProperty(indexed=False)
+  hp=ndb.IntegerProperty(indexed=False)
+  luck=ndb.IntegerProperty(indexed=False) 
+  defence=ndb.IntegerProperty(indexed=False)
+  wins=ndb.IntegerProperty(indexed=False)
+  show=ndb.BooleanProperty(indexed=True)
+  date = ndb.DateTimeProperty(auto_now_add=True)
 
 HEADER="""
     <html>
@@ -78,15 +89,11 @@ Role:<select id="role2" ><option value="Student" >Student</option><option value=
 	<div class='ranking'>
 	<h2>Ranking</h2>
 	<ol id = 'rank'>
-		<li></li>
-		<li></li>
-		<li></li>
-		<li></li>
-	</ol>
-	</div>
-</div>
 """
 END2="""
+</ol>
+</div>
+</div>
 </body>
 </html>
 """
@@ -94,6 +101,7 @@ END2="""
 
 class GotoF(webapp2.RequestHandler):
   def get(self):
+<<<<<<< HEAD
     user = users.get_current_user()
     if user:
       keystring = self.request.get('open')
@@ -113,6 +121,31 @@ class GotoF(webapp2.RequestHandler):
       self.response.write(END2)
     else:
       self.redirect('/nosign')
+=======
+	user = users.get_current_user()
+	if user is None:
+		self.redirect('/nosign')
+    keystring = self.request.get('open')
+    role = ndb.Key(urlsafe=keystring).get()
+    self.response.headers['Content-Type']="text/html"
+    self.response.write(HEADER)
+    self.response.write(role.name+"'")
+    self.response.write(MID)
+    self.response.write(role.role+"'")
+    self.response.write(N)
+    self.response.write("<tr><td id='p1hp'>"+str(role.hp)+"</td><td id='p1atk'>"+str(role.atk)+"</td><td id='p1spd'>"+str(role.speed)+"</td><td id='p1def'>"+str(role.defence)+"</td><td id='p1lck'>"+str(role.luck)+"</td><td id = 'w'>"+str(role.wins))
+    self.response.write("""</td></tr></table>""")
+    
+    self.response.write("<input type='hidden' style='z-index:99999;' name='key' id = 'key' value='"+ role.key.urlsafe()+"'></input>")
+    self.response.write(END1)
+    query = UserRole.query().order(-UserRole.wins)
+    roles = query.fetch(10)
+    ranklist=""
+    for role in roles:
+      ranklist += "<li style='margin-left:24%;text-align:left;'>"+role.name+": "+str(role.wins)+"</li>"
+    self.response.write(ranklist)
+    self.response.write(END2)
+>>>>>>> origin/master
 class UpdateWin(webapp2.RequestHandler):
   def post(self):
     keystring = self.request.get('pkey')
