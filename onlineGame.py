@@ -2,11 +2,11 @@ import cgi
 import urllib
 import os
 
+from django.utils import simplejson
 from google.appengine.ext.webapp import template
 from google.appengine.api import channel
 from google.appengine.api import users
 from google.appengine.ext import ndb
-from google.appengine.api import channel
 from datetime import datetime
 
 import jinja2
@@ -187,15 +187,19 @@ class FightNow(webapp2.RequestHandler):
         "attr2": attr2,
         "player": p,
         "token":token,
+<<<<<<< HEAD
         "roomNum":room,
         "ranklist":ranklist
+=======
+        "roomNum":room.roomNo,
+>>>>>>> origin/master
        }
     # reading and rendering the template
       render_template(self, template_values)
 
 class P1(webapp2.RequestHandler):
   def post(self):
-    num = int(self.request.get('roomNo'))
+    num = int(self.request.get('roomNum'))
     #staff to update
     query = Battle.query(ancestor=get_battle())
     query = query.filter(Battle.roomNo == num)
@@ -210,24 +214,24 @@ class P1(webapp2.RequestHandler):
     p2attr=room.tempAtt2
 
 	#hp, attack, speed, defence, luck
-    p1attr.atk = p1newstats[1]
-    p1attr.hp = p1newstats[0]
-    p1attr.speed = p1newstats[2]
-    p1attr.luck = p1newstats[3]
-    p1attr.defence = p1newstats[4]
+    p1attr.atk = int(p1newstats[1])
+    p1attr.hp = int(p1newstats[0])
+    p1attr.speed = int(p1newstats[2])
+    p1attr.luck = int(p1newstats[3])
+    p1attr.defence = int(p1newstats[4])
 
-    p2attr.atk = p2newstats[1]
-    p2attr.hp = p2newstats[0]
-    p2attr.speed = p2newstats[2]
-    p2attr.luck = p2newstats[3]
-    p2attr.defence = p2newstats[4]
+    p2attr.atk = int(p2newstats[1])
+    p2attr.hp = int(p2newstats[0])
+    p2attr.speed = int(p2newstats[2])
+    p2attr.luck = int(p2newstats[3])
+    p2attr.defence = int(p2newstats[4])
 
 	#keep it in base64 encoding
     battlePhrase=self.request.get('battle')
     room.fightText=battlePhrase
     
 	#update the info for this battle
-    rooms.put()
+    room.put()
 
 
 
@@ -248,7 +252,8 @@ class P1(webapp2.RequestHandler):
     }
     message=simplejson.dumps(gameUpdate)
     #channel.sendMessage(rooms.user1+rooms.roomNo, message)
-    channel.sendMessage(room.user2+room.roomNo, message)
+    channel.send_message(room.user2+str(room.roomNo), message)
+	
 class Quit(webapp2.RequestHandler):
   def post(self):
     num = int(self.request.get('RoomNo'))
