@@ -19,14 +19,68 @@ function postParameters(xmlHttp, target, parameters) {
     xmlHttp.send(parameters);
   }
 }
+
+window.onload=startUp();
+
+//when a message is recieved, handle it here....
+//this should be universal for both clients
+onMessage=function(m){
+	newState=JSON.parse(m.data);
+	
+	//player1 stats from JSON response in channel
+	player1.atk=newState.p1atk;
+	player1.hp=newState.p1hp;
+	player1.def=newState.p1def;
+	player1.spd=newState.p1speed;
+	player1.luck=newState.p1luck;
+	
+	//player2 stats from JSON response in channel
+	player2.atk=newState.p2atk;
+	player2.hp=newState.p2hp;
+	player2.def=newState.p2def;
+	player2.spd=newState.p2speed;
+	player2.luck=newState.p2luck;
+	
+	//get the battle text from the JSON response in channel
+	newBattleText=newState.battle;
+	
+	//update the HP values and bars, and the stats of the players
+	updateHP(player1.hp, player2.hp);
+	updateStats();
+	
+	//update the battle text, remembering to decode
+	document.getElementById("r0").innerHTML=base64_decode(newState.battle);
+};
+
+//only player 2 calls this to update the stats, since p1 will do it with the game engine as is runs
+updateStats(){
+	//update p1 stats on page
+	document.getElementById("p1def").innerText=player1.def;
+	document.getElementById("p1lck").innerText=player1.luck;
+    document.getElementById("p1atk").innerText=player1.atk;
+    document.getElementById("p1spd").innerText=player1.speed;
+	
+	//update p2 stats on page
+	document.getElementById("p2def").innerText=player2.def;
+	document.getElementById("p2lck").innerText=player2.luck;
+    document.getElementById("p2atk").innerText=player2.atk;
+    document.getElementById("p2spd").innerText=player2.speed;
+}
 	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
+	
+openChannel=function() {
+	var token='{{ token }}';
+	var channel = new goog.appengine.Channel(token);
+	var handler={
+		'onopen': function() {},
+		'onmessage': onMessage,
+		'onerror': function() {},
+		'onclose': function() {}
+	};
+	var socket=channel.open(handler);
+	socket.onopen=onOpened;
+	socket.onmessage=onMessage;
+}  
 	  
 	  
 	  
@@ -50,7 +104,10 @@ function postParameters(xmlHttp, target, parameters) {
 			if(gamePlaying){
 				return;
 			}
-        
+			p2starter=document.getElementById("player").value;
+				if(p1starter==2){
+					openChannel();
+				}
                 gamePlaying=true;
                 clearInterval(intervalID);
                 player1.name=document.getElementById("name1").value;
@@ -64,11 +121,11 @@ function postParameters(xmlHttp, target, parameters) {
 				player1.luck=document.getElementById("p1lck").innerText;
                 player1.counter=0;
                 player1.identity=1;
-                player1.key = document.getElementById('key').value;
+                player1.key = document.getElementById('key1').value;
                 
-        document.getElementById("bt").innerHTML="<h2>Option</h2>";
-        document.getElementById("bt").innerHTML+="<button style='margin-top: 30px;font-size: 16pt;font-family:Impact;' onclick='newF()'>New Fight!</button>";
-        document.getElementById("bt").innerHTML+="<br><button style='margin-top: 30px;font-size: 16pt;font-family:Impact;' onclick='replay()'>Re-Fight!</button> <form  method='get' action='/createmain'> <button style='margin-top: 30px;font-size: 16pt;font-family:Impact;'>Change Role</button> </form>";
+				document.getElementById("bt").innerHTML="<h2>Option</h2>";
+				document.getElementById("bt").innerHTML+="<button style='margin-top: 30px;font-size: 16pt;font-family:Impact;' onclick='newF()'>New Fight!</button>";
+				document.getElementById("bt").innerHTML+="<br><button style='margin-top: 30px;font-size: 16pt;font-family:Impact;' onclick='replay()'>Re-Fight!</button> <form  method='get' action='/createmain'> <button style='margin-top: 30px;font-size: 16pt;font-family:Impact;'>Change Role</button> </form>";
         
 //player1 saver#############################
                 t1.hp=p1hphold;
@@ -81,17 +138,18 @@ function postParameters(xmlHttp, target, parameters) {
                 player2.name=document.getElementById("name2").value;
                 var roleholder2=document.getElementById("role2");
                 player2.role=roleholder2.options[roleholder2.selectedIndex].text;
-                player2.atk=getRandom(1,101);
-                player2.speed=getRandom(1,101);
-                var p2hphold=getRandom(300,500);
+                player2.atk=document.getElementById("p2atk").innerText;
+                player2.speed=document.getElementById("p2spd").innerText;
+                var p2hphold=parseInt(docment.getElementById("p2hp").innerText);
                 p2saveHP=p2hphold;
                 player2.hp=p2hphold;
-                player2.def=getRandom(1,101);
-				        player2.luck=getRandom(1,101);
+                player2.def=document.getElementById("p2def").innerText;
+				player2.luck=getElementById("p2lck").innerText;
                 player2.counter=0;
                 player2.identity=2;
+				player2.key=document.getElementById("key2").value;
                 
-console.log("p1savedHP: "+p1saveHP);
+				console.log("p1savedHP: "+p1saveHP);
                 console.log("p2savedHP: "+p2saveHP);
 //player2 saver######################################       
                 t2.hp=p2hphold;
@@ -104,16 +162,16 @@ console.log("p1savedHP: "+p1saveHP);
                 player2.cntsp=1+0.01*player2.speed;
                 
                 document.getElementById("p2hp").innerText=player2.hp;
-				        document.getElementById("p2atk").innerText=player2.atk;
-				        document.getElementById("p2spd").innerText=player2.speed;
-				        document.getElementById("p2def").innerText=player2.def;
-				        document.getElementById("p2lck").innerText=player2.luck;
+				document.getElementById("p2atk").innerText=player2.atk;
+				document.getElementById("p2spd").innerText=player2.speed;
+				document.getElementById("p2def").innerText=player2.def;
+				document.getElementById("p2lck").innerText=player2.luck;
 				
-				newAttack+="Fight Begins!<br>"
+				newAttack+="Fight Begins!<br>";
 				
 				document.getElementById("r0").innerHTML=newAttack;
 				
-				p1starter=docment.getElementById("player").value;
+				p1starter=document.getElementById("player").value;
 				if(p1starter==1){
 					intervalID=setInterval(function() { attackFunc() }, 3000);
 				}
@@ -122,6 +180,32 @@ console.log("p1savedHP: "+p1saveHP);
 			//returns random # between min (inclusive) and max (exclusive)
 			function getRandom(min, max){
 				return Math.floor((Math.random()*(max-min))+min);
+			}
+			
+			function updateHP(p1hp, p2hp){
+				//update the healths        
+				document.getElementById("p1hp").innerHTML=p1hp;
+				document.getElementById("p2hp").innerHTML=p2hp;
+          
+				var chp1= Math.floor(p1hp/p1saveHP*100)+"%";
+				var chp2= Math.floor(p2hp.hp/p2saveHP*100)+"%";
+				//console.log(chp1+" "+chp2);
+				if (p1hp>0) {
+					document.getElementById('hp1').style.width = chp1;
+				}
+				else {
+					chp1='0%';
+					document.getElementById('hp1').style.width = '0%';
+				}
+				if (p2hp>0){  
+					document.getElementById('hp2').style.width = chp2;
+				}
+				else {
+					chp2='0%';
+					document.getElementById('hp2').style.width = '0%';
+				}
+				var box = document.getElementById('disB');
+				box.scrollTop = box.scrollHeight;
 			}
 			
 			function updateRows(player, target){
@@ -163,29 +247,8 @@ console.log("p1savedHP: "+p1saveHP);
 				}
 				newAttack+="<br>";
 				document.getElementById("r0").innerHTML=newAttack;
-				//update the healths        
-				document.getElementById("p1hp").innerHTML=player1.hp;
-				document.getElementById("p2hp").innerHTML=player2.hp;
-          
-				var chp1= Math.floor(player1.hp/p1saveHP*100)+"%";
-				var chp2= Math.floor(player2.hp/p2saveHP*100)+"%";
-				//console.log(chp1+" "+chp2);
-				if (player1.hp>0) {
-					document.getElementById('hp1').style.width = chp1;
-				}
-				else {
-					chp1='0%';
-					document.getElementById('hp1').style.width = '0%';
-				}
-				if (player2.hp>0){  
-					document.getElementById('hp2').style.width = chp2;
-				}
-				else {
-					chp2='0%';
-					document.getElementById('hp2').style.width = '0%';
-				}
-				var box = document.getElementById('disB');
-				box.scrollTop = box.scrollHeight;
+
+				updateHP(player1.hp, player2.hp);
 				
 				//build the AJAX reponses and send them...
 				//the order for the stats is hp, attack, speed, defence, luck
@@ -198,7 +261,7 @@ console.log("p1savedHP: "+p1saveHP);
 				var roomNum="roomNum="+str(document.getElementById("roomNum"));
 				var player1info="p1="+p1stats;
 				var player2info="p2="+p2stats;
-				var p=isFinished+'&'+roomNum+'&'+player1info+'&'+player2info+'&'+'battle='+newAttack;
+				var p=isFinished+'&'+roomNum+'&'+player1info+'&'+player2info+'&'+'battle='+base64_encode(newAttack);
 				postParameters(xmlHttp, '/player1', p);
 			}
 		
@@ -635,4 +698,65 @@ function newF(){
    
    clearInterval(intervalID);
    document.getElementById("bt").innerHTML="<h2>Option</h2><button style='margin-top: 30px;font-size: 16pt;font-family:Impact;' onclick='startUp()'>Fight!</button> <form  method='get' action='/createmain'> <button style='margin-top: 50px;font-size: 16pt;font-family:Impact;'>Change Role</button> </form>";
+}
+
+
+
+
+ function base64_encode(data) {
+  //  discuss at: http://phpjs.org/functions/base64_encode/
+  // original by: Tyler Akins (http://rumkin.com)
+  // improved by: Bayron Guevara
+  // improved by: Thunder.m
+  // improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+  // improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+  // improved by: Rafał Kukawski (http://kukawski.pl)
+  // bugfixed by: Pellentesque Malesuada
+  //   example 1: base64_encode('Kevin van Zonneveld');
+  //   returns 1: 'S2V2aW4gdmFuIFpvbm5ldmVsZA=='
+  //   example 2: base64_encode('a');
+  //   returns 2: 'YQ=='
+
+  var b64 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+  var o1, o2, o3, h1, h2, h3, h4, bits, i = 0,
+    ac = 0,
+    enc = '',
+    tmp_arr = [];
+
+  if (!data) {
+    return data;
+  }
+
+  do { // pack three octets into four hexets
+    o1 = data.charCodeAt(i++);
+    o2 = data.charCodeAt(i++);
+    o3 = data.charCodeAt(i++);
+
+    bits = o1 << 16 | o2 << 8 | o3;
+
+    h1 = bits >> 18 & 0x3f;
+    h2 = bits >> 12 & 0x3f;
+    h3 = bits >> 6 & 0x3f;
+    h4 = bits & 0x3f;
+
+    // use hexets to index into b64, and append result to encoded string
+    tmp_arr[ac++] = b64.charAt(h1) + b64.charAt(h2) + b64.charAt(h3) + b64.charAt(h4);
+  } while (i < data.length);
+
+  enc = tmp_arr.join('');
+
+  var r = data.length % 3;
+
+  return (r ? enc.slice(0, r - 3) : enc) + '==='.slice(r || 3);
+}
+
+function base64_decode(s) {
+    var e={},i,b=0,c,x,l=0,a,r='',w=String.fromCharCode,L=s.length;
+    var A="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    for(i=0;i<64;i++){e[A.charAt(i)]=i;}
+    for(x=0;x<L;x++){
+        c=e[s.charAt(x)];b=(b<<6)+c;l+=6;
+        while(l>=8){((a=(b>>>(l-=8))&0xff)||(x<(L-2)))&&(r+=w(a));}
+    }
+    return r;
 }

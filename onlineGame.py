@@ -53,34 +53,6 @@ class Battle(ndb.Model) :
  
 def get_battle():
 	return ndb.Key('user', 'battles')
-
-class MainPage(webapp2.RequestHandler):
-	def get(self):
-		HEADER = """
-<html>
-   <head>
-      <title>Online Battles</title>
-      <link rel="stylesheet" href="css/style.css">
-   </head>
-   <body id = "titleback" class = "wide">
-      <h2>Hello There</h2>
-  </body></html>
-  """
-		self.response.headers['Content-Type']="text/html"
-		self.response.write(HEADER)
-	def post(self):
-		HEADER = """
-<html>
-   <head>
-      <title>Online Battles</title>
-      <link rel="stylesheet" href="css/style.css">
-   </head>
-   <body id = "titleback" class = "wide">
-      <h2>Hello There</h2>
-  </body></html>
-  """
-		self.response.headers['Content-Type']="text/html"
-		self.response.write(HEADER)
 	
 	
 class CheckRoom(webapp2.RequestHandler):
@@ -210,8 +182,10 @@ class P1(webapp2.RequestHandler):
     query = Battle.query(ancestor=get_battle())
     query = query.filter(Battle.roomNo == num)
     rooms = query.fetch()
-    room=room[0]
+    room=rooms[0]
 
+	over=self.request.get('over')
+	
     p1=self.request.get('p1')
     p1newstats=p1.split(" ")
     p2=self.request.get('p2')
@@ -232,25 +206,35 @@ class P1(webapp2.RequestHandler):
     p2attr.luck = p2newstats[3]
     p2attr.defence = p2newstats[4]
 
-    rooms.put()
+	#keep it in base64 encoding
+	battlePhrase=self.request.get('battle')
+	room.fightText=battlePhrase
+    
+	#update the info for this battle
+	rooms.put()
 
 	#this will be to send the message to player2 through the channel
 	#message will be built from what player1 uploads through post request
-    #channel.sendMessage(rooms.user2+rooms.roomNo, message)
-
-class P2(webapp2.RequestHandler):
-  def post(self):
-    num = int(self.request.get('roomNo'))
-    query = Battle.query(ancestor=get_battle())
-    query = query.filter(Battle.roomNo == num)
-    rooms = query.fetch()
-
+    gameUpdate={
+	  'p1atk': p1attr.atk,
+	  'p1hp': p1attr.hp,
+	  'p1speed': p1attr.speed,
+	  'p1luck': p1attr.luck,
+	  'p1def': p1attr.defence,
+	  'p2atk': p2attr.atk,
+	  'p2hp': p2attr.hp,
+	  'p2speed': p2attr.speed,
+	  'p2luck': p2attr.luck,
+	  'p2def': p2attr.defence,
+	  'battle': battlePhrase
+	}
+    message=simplejson.dumps(gameUpdate)
+    #channel.sendMessage(rooms.user1+rooms.roomNo, message)
+    channel.sendMessage(room.user2+room.roomNo, message)
 
 app = webapp2.WSGIApplication([
-  ('/onlinefight', MainPage),
   ('/onlineBegin',CheckRoom),
   ('/waitnow',Wait),
   ('/beginow',FightNow),
-  ('/player1',P1),
-  ('/player2',P2)
+  ('/player1',P1)
 ], debug=True)
