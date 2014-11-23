@@ -64,6 +64,10 @@ function createRole(){
       {
         alert('Only allow to create 3 roles!');
       }
+	  else if (re == "long")
+	  {
+	    alert('Your name is too long, please input a name which length is less than 26 and bigger than 0!');
+	  }
       else{
         location.reload();
       }

@@ -90,15 +90,16 @@ class MainPage(webapp2.RequestHandler) :
   def post(self) :
     role=self.request.get('role')
     name=self.request.get('name')
-    if name =="":
+    if name.rstrip(' ') =="":
       self.response.out.write("null")
     else:
       query = UserRole.query(ancestor=get_key())
       query = query.filter(UserRole.show == True)
       roles = query.fetch()
-      if len(roles)>=3:
+      if len(name)>=26:
+        self.response.out.write('long')
+      elif len(roles)>=3:
         self.response.out.write("more")
-        
       else:
         query = UserRole.query(ancestor=get_key())
         query = query.filter(UserRole.name == name, UserRole.role== role)

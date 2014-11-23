@@ -30,12 +30,12 @@ HEADER="""
 <div class ='main'>
 	<div  id ='p1' style='float: left;padding-left:1%' class='dd'>
 	<label style ="font-style:italic;
-font-family: Cursive;">Name:<input type="text" size="10" name="name1" id = "name1" disabled value='
+font-family: Cursive;">Name:<input type="text" size="23" name="name1" id = "name1" disabled value='
 """
 MID="""
 ></label>
 <br>
-	<label style ="font-style:italic;font-family: Cursive;">Role:<input type="text" size="8" name="role1" id = "role1" disabled value='"""
+	<label style ="font-style:italic;font-family: Cursive;">Role:&nbsp&nbsp<input type="text" size="8" name="role1" id = "role1" disabled value='"""
 N="""
 ></label>
 	<table id ="table1" class = "t">
@@ -55,11 +55,11 @@ END1="""
 	
 	<div id = 'p2' style='float: left;' class='dd'>
 	<label style ="font-style:italic;
-font-family: Cursive;">Name:<input type="text" name="name2" size="10" id = "name2"></label>
+font-family: Cursive;">Name:<input type="text" name="name2" size="23" id = "name2"></label>
 <label style ="font-style:italic;
 font-family: Cursive;">
 <br>
-Role:<select id="role2" ><option value="Student" >Student</option><option value="Professor">Professor</option><option value="Programmer">Programmer</option></select></label>
+Role:&nbsp&nbsp<select id="role2" ><option value="Student" >Student</option><option value="Professor">Professor</option><option value="Programmer">Programmer</option></select></label>
 	<table id ="table2" class = "t">
 	<tr><th>HP</th><th>Attack</th><th>Speed</th><th>Defence</th><th>Luck</th><th>Wins</th></tr>
 	<tr><td id='p2hp'></td><td id='p2atk'></td><td id='p2spd'></td><td id='p2def'></td><td id='p2lck'></td><td></td></tr>
