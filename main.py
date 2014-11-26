@@ -4,18 +4,7 @@ import random
 from google.appengine.ext.webapp import template
 from google.appengine.api import users
 from google.appengine.ext import ndb
-
-class UserRole(ndb.Model) :
-  name=ndb.StringProperty(indexed=True)
-  role=ndb.StringProperty(indexed=True)
-  atk=ndb.IntegerProperty(indexed=False)
-  speed=ndb.IntegerProperty(indexed=False)
-  hp=ndb.IntegerProperty(indexed=False)
-  luck=ndb.IntegerProperty(indexed=False) 
-  defence=ndb.IntegerProperty(indexed=False)
-  wins=ndb.IntegerProperty(indexed=False)
-  show=ndb.BooleanProperty(indexed=True)
-  date = ndb.DateTimeProperty(auto_now_add=True)
+from logincreate import UserRole
 
 HEADER="""
     <html>
@@ -30,7 +19,7 @@ HEADER="""
 <div class ='main'>
 	<div  id ='p1' style='float: left;padding-left:1%' class='dd'>
 	<label style ="font-style:italic;
-font-family: Cursive;">Name:<input type="text" size="23" name="name1" id = "name1" disabled value='
+font-family: Cursive;">Name:<input type="text" size="18" name="name1" id = "name1" disabled value='
 """
 MID="""
 ></label>
@@ -55,7 +44,7 @@ END1="""
 	
 	<div id = 'p2' style='float: left;' class='dd'>
 	<label style ="font-style:italic;
-font-family: Cursive;">Name:<input type="text" name="name2" size="23" id = "name2"></label>
+font-family: Cursive;">Name:<input type="text" name="name2" size="18" id = "name2"></label>
 <label style ="font-style:italic;
 font-family: Cursive;">
 <br>
@@ -122,7 +111,7 @@ class GotoF(webapp2.RequestHandler):
       roles = query.fetch(10)
       ranklist=""
       for role in roles:
-        ranklist += "<li style='margin-left:24%;text-align:left;'>"+role.name+": "+str(role.wins)+"</li>"
+        ranklist += "<li style='text-align:left;'>"+role.name+": "+str(role.wins)+"</li>"
       self.response.write(ranklist)
       self.response.write(END2)
     else:

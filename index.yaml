@@ -13,11 +13,6 @@ indexes:
 - kind: Battle
   ancestor: yes
   properties:
-  - name: date
-
-- kind: Battle
-  ancestor: yes
-  properties:
   - name: user1
   - name: user2
   - name: state1
@@ -25,16 +20,18 @@ indexes:
   - name: roomNo
   - name: date
 
-- kind: Battle
-  ancestor: yes
-  properties:
-  - name: user2
-  - name: date
-
 - kind: UserInfo
   properties:
   - name: user
   - name: date
+    direction: desc
+
+- kind: UserRole
+  ancestor: yes
+  properties:
+  - name: show
+  - name: date
+  - name: wins
     direction: desc
 
 - kind: UserRole

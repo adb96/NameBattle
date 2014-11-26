@@ -66,7 +66,7 @@ function createRole(){
       }
 	  else if (re == "long")
 	  {
-	    alert('Your name is too long, please input a name which length is less than 26 and bigger than 0!');
+	    alert('Your name is too long, please input a name which length is less than 21 and bigger than 0!');
 	  }
       else{
         location.reload();

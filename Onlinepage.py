@@ -6,6 +6,7 @@ from google.appengine.api import users
 from google.appengine.ext import ndb
 from datetime import datetime
 import json
+from logincreate import UserRole
 
 import webapp2
 
@@ -22,17 +23,7 @@ class UserInfo(ndb.Model):
 	user = ndb.StringProperty()
 	date = ndb.DateTimeProperty(auto_now_add=True)
       
-class UserRole(ndb.Model) :
-  name=ndb.StringProperty(indexed=True)
-  role=ndb.StringProperty(indexed=True)
-  atk=ndb.IntegerProperty(indexed=False)
-  speed=ndb.IntegerProperty(indexed=False)
-  hp=ndb.IntegerProperty(indexed=False)
-  luck=ndb.IntegerProperty(indexed=False) 
-  defence=ndb.IntegerProperty(indexed=False)
-  wins=ndb.IntegerProperty(indexed=False)
-  show=ndb.BooleanProperty(indexed=True)
-  date = ndb.DateTimeProperty(auto_now_add=True)
+
 
 HEADER = """
 <html>

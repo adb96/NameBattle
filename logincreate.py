@@ -48,7 +48,7 @@ class UserRole(ndb.Model) :
   hp=ndb.IntegerProperty(indexed=False)
   luck=ndb.IntegerProperty(indexed=False) 
   defence=ndb.IntegerProperty(indexed=False)
-  wins=ndb.IntegerProperty(indexed=False)
+  wins=ndb.IntegerProperty(indexed=True)
   show=ndb.BooleanProperty(indexed=True)
   date = ndb.DateTimeProperty(auto_now_add=True)
   
@@ -96,7 +96,7 @@ class MainPage(webapp2.RequestHandler) :
       query = UserRole.query(ancestor=get_key())
       query = query.filter(UserRole.show == True)
       roles = query.fetch()
-      if len(name)>=26:
+      if len(name)>20:
         self.response.out.write('long')
       elif len(roles)>=3:
         self.response.out.write("more")
