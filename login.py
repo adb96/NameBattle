@@ -60,7 +60,6 @@ application = webapp2.WSGIApplication([
     (r'/create', 'logincreate.CreateRole'),
     (r'/action','logincreate.ActionHandler'),
     (r'/begin','main.GotoF'),
-    (r'/update', 'main.UpdateWin'),
     (r'/online', 'Onlinepage.MainPage'),
     (r'/users', 'Onlinepage.UserHandler'),
     (r'/time', 'Onlinepage.TimeHandler'),

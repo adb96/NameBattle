@@ -19,30 +19,30 @@ function postParameters(xmlHttp, target, parameters) {
   }
 }
 
-function updateWins(key) {
-  var xmlHttp = createXmlHttp();
-  var p = "pkey="+key;
-  // onreadystatechange will be called every time the state of the XML HTTP object changes
-  xmlHttp.onreadystatechange = function() {
+// function updateWins(key) {
+  // var xmlHttp = createXmlHttp();
+  // var p = "pkey="+key;
+  // // onreadystatechange will be called every time the state of the XML HTTP object changes
+  // xmlHttp.onreadystatechange = function() {
   
-    // we really only care about 4 (response complete) here.
-    if (xmlHttp.readyState == 4  && xmlHttp.status==200) {
-      // we parse the content of the response
+    // // we really only care about 4 (response complete) here.
+    // if (xmlHttp.readyState == 4  && xmlHttp.status==200) {
+      // // we parse the content of the response
      
-      var newWin = xmlHttp.responseText;
-      console.log(newWin);
-      var s =document.getElementById('w');
+      // var newWin = xmlHttp.responseText;
+      // console.log(newWin);
+      // var s =document.getElementById('w');
       
-      s.innerHTML = parseInt(newWin);
-      // we need to know what to expect here; we're assuming that there will be 
-      // first_name and last_name fields.
+      // s.innerHTML = parseInt(newWin);
+      // // we need to know what to expect here; we're assuming that there will be 
+      // // first_name and last_name fields.
      
-    }
-  }
+    // }
+  // }
   
-  postParameters(xmlHttp, '/update', p);
+  // postParameters(xmlHttp, '/update', p);
  
-}
+// }
 
 function createRole(){
   var xmlHttp = createXmlHttp();
@@ -67,6 +67,14 @@ function createRole(){
 	  else if (re == "long")
 	  {
 	    alert('Your name is too long, please input a name which length is less than 21 and bigger than 0!');
+	  }
+	  else if (re == "plz")
+	  {
+	    alert("Please don't do this!");
+	  }
+	   else if (re == "Wrong Role Name!")
+	  {
+	    alert("Wrong Role Name!");
 	  }
       else{
         location.reload();

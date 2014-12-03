@@ -171,9 +171,9 @@ class FightNow(webapp2.RequestHandler):
           p=0 #error
         query = UserRole.query().order(-UserRole.wins)
         roles = query.fetch(10)        
-        ranklist=""
+        ranklist=[]
         for role in roles:
-          ranklist += "<li style='text-align:left;'>"+role.name+": "+str(role.wins)+"</li>"
+          ranklist.append (role.name+": "+str(role.wins))
         token = channel.create_channel(users.get_current_user().nickname() + str(num))
         template_values = {
           "attr1": attr1,

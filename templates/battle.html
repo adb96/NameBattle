@@ -34,6 +34,7 @@ font-family: Cursive;">Role:&nbsp&nbsp<input type="text" size="8" name="role1" i
 	 <input type='hidden' style='z-index:99999;' name='player' id="player" value="{{player}}">
 	<div id = 'p2' style='float: left;' class='dd'>
 	<label style ="font-style:italic;font-family: Cursive;">Name:<input type="text" name="name2" size="18" id = "name2"  value = "{{attr2.name}}" disabled></label>
+<br>
 <label style ="font-style:italic;font-family: Cursive;">Role:&nbsp&nbsp<input type="text" size="8" name="role2" id = "role2"  value ='{{attr2.role}}' disabled></label>
 <table id ="table2" class = "t">
 	<tr><th>HP</th><th>Attack</th><th>Speed</th><th>Defence</th><th>Luck</th><th>Wins</th></tr>
@@ -65,7 +66,9 @@ font-family: Cursive;">Role:&nbsp&nbsp<input type="text" size="8" name="role1" i
 	<div class='ranking'>
 	<h2>Ranking</h2>
 	<ol id = 'rank'>
-		{{ranklist}}
+	{% for item in ranklist %}
+        <li style='text-align:left;'>{{ item }}</li>
+    {% endfor %}
 	</ol>
 	</div>
 </div>

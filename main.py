@@ -118,18 +118,17 @@ class GotoF(webapp2.RequestHandler):
       self.redirect('/nosign')
 
     
-class UpdateWin(webapp2.RequestHandler):
-  def post(self):
-    keystring = self.request.get('pkey')
-    role = ndb.Key(urlsafe=keystring).get()
-    role.wins = role.wins +1
-    role.put()
-    self.response.out.write(role.wins)
+# class UpdateWin(webapp2.RequestHandler):
+  # def post(self):
+    # keystring = self.request.get('pkey')
+    # role = ndb.Key(urlsafe=keystring).get()
+    # role.wins = role.wins +1
+    # role.put()
+    # self.response.out.write(role.wins)
 
 
 app = webapp2.WSGIApplication([ 
   ('/begin',GotoF),
-  ('/update', UpdateWin),
   (r'/createmain', 'logincreate.MainPage'),
   (r'/nosign', 'Redirect.MainPage'),
 ], debug=True)

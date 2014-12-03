@@ -168,7 +168,7 @@
           gameOver(player1, player2);
           console.log("GAME OVER FUNCTION CALLED");
           //console.log(player1.key);
-          updateWins(player1.key);
+          //updateWins(player1.key);
     
           
         }

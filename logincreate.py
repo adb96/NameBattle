@@ -98,8 +98,12 @@ class MainPage(webapp2.RequestHandler) :
       roles = query.fetch()
       if len(name)>20:
         self.response.out.write('long')
+      elif "<" in name or ">" in name or "'" in name or "\"" in name:
+        self.response.out.write('plz')
       elif len(roles)>=3:
         self.response.out.write("more")
+      elif role !='Student' and role != 'Professor' and role !='Programmer':
+        self.response.out.write("Wrong Role Name!")
       else:
         query = UserRole.query(ancestor=get_key())
         query = query.filter(UserRole.name == name, UserRole.role== role)
