@@ -245,7 +245,24 @@ class P1(webapp2.RequestHandler):
     message=simplejson.dumps(gameUpdate)
     #channel.sendMessage(rooms.user1+rooms.roomNo, message)
     channel.send_message(room.user2+str(room.roomNo), message)
-	
+class UpdateWin(webapp2.RequestHandler):
+   def post(self):
+    num = int(self.request.get('room'))
+    player = int(self.request.get('p'))
+    query = Battle.query(ancestor=get_battle())
+    query = query.filter(Battle.roomNo == num)
+    rooms = query.fetch(1)
+    if len(rooms)==1:
+      room = rooms[0]
+      if player == 1:
+          key = room.attribute1.key
+      elif player ==2:
+          key = room.attribute2.key
+      role = ndb.Key(urlsafe=key).get()
+      role.wins = role.wins +1
+      role.put()
+      self.response.out.write(role.wins)
+
 class Quit(webapp2.RequestHandler):
   def post(self):
     num = int(self.request.get('RoomNo'))
@@ -255,11 +272,33 @@ class Quit(webapp2.RequestHandler):
     if len(rooms)==1:
       rooms[0].key.delete()
 
+class Back(webapp2.RequestHandler):
+  def post(self):
+    num = int(self.request.get('roomNum'))
+    query = Battle.query(ancestor=get_battle())
+    query = query.filter(Battle.roomNo == num)
+    rooms = query.fetch(1)
+    if len(rooms)==1:
+      rooms[0].key.delete() 
+    self.redirect('/online')
+	  
+class Rank(webapp2.RequestHandler):
+  def post(self):
+    query = UserRole.query().order(-UserRole.wins)
+    roles = query.fetch(10)
+    ranklist=""
+    for role in roles:
+      ranklist += "<li style='text-align:left;'>"+role.name+": "+str(role.wins)+"</li>"
+    self.response.write(ranklist)
+	  
 app = webapp2.WSGIApplication([
+  ('/update',UpdateWin),
   ('/onlineBegin',CheckRoom),
   ('/waitnow',Wait),
   ('/beginow',FightNow),
   ('/player1',P1),
   ('/quit',Quit),
+  ('/back',Back),
+  ('/updateRank',Rank),
   (r'/nosign', 'Redirect.MainPage')
 ], debug=True)

@@ -1,4 +1,5 @@
       //AJAX function import for communication to server
+var end = true;
 function createXmlHttp() {
 	var xmlhttp;
 	if (window.XMLHttpRequest) {
@@ -46,12 +47,56 @@ onMessage=function(m){
 	//update the HP values and bars, and the stats of the players
 	updateHP(player1.hp, player2.hp);
 	updateStats();
-	
+	if (end){
+		if (player2.hp <= 0){
+		console.log("end1");
+		document.getElementById("back").disabled = false;
+		setTimeout(function(){upwin2(1);}, 2000);
+		setTimeout(function(){updateRank();}, 2000);
+		end = false;
+		}
+		else if (player1.hp <= 0){
+		document.getElementById("back").disabled = false;
+		console.log("end2");
+		setTimeout(function(){upwin2(2);}, 2000);
+		setTimeout(function(){updateRank();}, 2000);
+		end = false;
+		}
+		
+	}
 	//update the battle text, remembering to decode
 	document.getElementById("r0").innerHTML=newState.battle;
 	var box = document.getElementById('disB');
     box.scrollTop = box.scrollHeight;
 };
+function upwin2(p){
+	var s =document.getElementById('w'+p.toString());
+	var newWin = parseInt(s.innerText)+1;
+    s.innerHTML = newWin;
+}
+function updateRank(){
+  var xmlHttp = createXmlHttp();
+
+  // onreadystatechange will be called every time the state of the XML HTTP object changes
+  xmlHttp.onreadystatechange = function() {
+  
+    // we really only care about 4 (response complete) here.
+    if (xmlHttp.readyState == 4  && xmlHttp.status==200) {
+      // we parse the content of the response
+     
+      var newRank = xmlHttp.responseText;
+      console.log(newRank);
+      var s =document.getElementById('rank');
+      
+      s.innerHTML = newRank;
+      // we need to know what to expect here; we're assuming that there will be 
+      // first_name and last_name fields.
+     
+    }
+  }
+  
+  postParameters(xmlHttp, '/updateRank','');
+}
 
 //only player 2 calls this to update the stats, since p1 will do it with the game engine as is runs
 function updateStats(){
@@ -298,11 +343,13 @@ openChannel=function() {
 				console.log(player2info);
 				var p=isFinished+'&'+roomNum+'&'+player1info+'&'+player2info+'&'+'battle='+newAttack;
 				postParameters(xmlHttp, '/player1', p);
+				document.getElementById("back").disabled = false;
+				
       }
 			
-function updateWinner(key, player) {
+function updateWinner(roomNum, player) {
   var xmlHttp = createXmlHttp();
-  var p = "pkey="+key;
+  var p = "room="+roomNum+"&"+"p="+player;
   // onreadystatechange will be called every time the state of the XML HTTP object changes
   xmlHttp.onreadystatechange = function() {
   
@@ -315,6 +362,7 @@ function updateWinner(key, player) {
       var s =document.getElementById('w'+player.toString());
       
       s.innerHTML = parseInt(newWin);
+	  updateRank();
       // we need to know what to expect here; we're assuming that there will be 
       // first_name and last_name fields.
      
@@ -332,15 +380,17 @@ function updateWinner(key, player) {
           gameOver(player1, player2);
           console.log("GAME OVER FUNCTION CALLED");
           //console.log(player1.key);
-          updateWinner(player1.key, 1);
-    
+		  var roomNum=(document.getElementById("roomNum").value).toString();
+          updateWinner(roomNum, 1);
           
         }
         if(player1.hp<=0 && player1.hp<player2.hp){
           console.log("GAME OVER FUNCTION CALLED");
           gameOverFlag=true;
           gameOver(player2, player1);
-		  updateWinner(player2.key, 2);
+		  var roomNum=(document.getElementById("roomNum").value).toString();
+		  updateWinner(roomNum, 2);
+
         }
  
        // if(!gameOverFlag){

@@ -21,7 +21,6 @@ font-family: Cursive;">Role:&nbsp&nbsp<input type="text" size="8" name="role1" i
   <td id='p1def'>{{attr1.defence}}</td><td id='p1lck'>{{attr1.luck}}</td><td id = 'w1'>{{attr1.wins}}</td></tr></table>
  <input type='hidden' style='z-index:99999;' name='token' id = 'token' value='{{token}}'>
  <input type='hidden' style='z-index:99999;' name='key1' id = 'key1' value='{{attr1.key}}'>
- <input type='hidden' style='z-index:99999;' name='roomNum' id = 'roomNum' value='{{roomNum}}'>
     <div class='hp'>
 		  <div id ='hp1' style='width: 100%;'>
 		  </div>
@@ -52,9 +51,9 @@ font-family: Cursive;">Role:&nbsp&nbsp<input type="text" size="8" name="role1" i
 	<h2>Option</h2>
 
 
-  <form  method="get" action="/online">
-
-  <button style="margin-top: 30%;font-size: 16pt;font-family:Impact;" id ='back'disabled>Back</button>
+  <form  method="post" action="/back">
+  <input type='hidden' style='z-index:99999;' name='roomNum' id = 'roomNum' value='{{roomNum}}'>
+  <button style="margin-top: 30%;font-size: 16pt;font-family:Impact;" id ='back' disabled>Back</button>
   </form>
 </div>
 	

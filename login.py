@@ -67,7 +67,10 @@ application = webapp2.WSGIApplication([
     (r'/waitnow','onlineGame.Wait'),
     (r'/beginow','onlineGame.FightNow'),
     (r'/player1','onlineGame.P1'),
-	(r'/nosign', 'Redirect.MainPage'),
+    (r'/nosign', 'Redirect.MainPage'),
     (r'/quit','onlineGame.Quit'),
+    (r'/update','onlineGame.UpdateWin'),
+    (r'/updateRank','onlineGame.Rank'),
+    (r'/back','onlineGame.Back')
 ], debug=True)
 
